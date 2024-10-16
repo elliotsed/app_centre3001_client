@@ -45,7 +45,7 @@ const EditContact = () => {
         e.preventDefault()
         // console.log(values)
 
-        axios.put("http://localhost:3000/gestion_contact/update-contact/"+id, values, {
+        axios.put("https://app-centre3001-api.vercel.app/contactCentre3001/update-contact/"+id, values, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
@@ -68,7 +68,7 @@ const EditContact = () => {
 
 
     useEffect(() => {
-        axios.get("http://localhost:3000/gestion_contact/contacts/" + id, {
+        axios.get("https://app-centre3001-api.vercel.app/contactCentre3001/contacts/" + id, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
