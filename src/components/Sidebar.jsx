@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaUser } from 'react-icons/fa6'
+// import { FaUser } from 'react-icons/fa6'
 import { RiContactsBook3Fill } from 'react-icons/ri'
 import { IoPersonAddSharp } from 'react-icons/io5'
 import { RiLogoutCircleLine } from 'react-icons/ri'
@@ -48,14 +48,14 @@ const Sidebar = () => {
                 </Link>
             </li>
 
-            <li className={`${activeLink === 3 ? "activeLink" : ""}`} onClick={() => setActiveLink(3)}>
+            {/* <li className={`${activeLink === 3 ? "activeLink" : ""}`} onClick={() => setActiveLink(3)}>
                 <Link to="#" className='sidebar-link'>
                     <span className="icon">
                         <FaUser />
                     </span>
                     <span className="title">Mon Profil</span>
                 </Link>
-            </li>
+            </li> */}
 
             <li className={`${activeLink === 4 ? "activeLink" : ""}`} onClick={() => setActiveLink(4)}>
                 <Link to="/logout" className='sidebar-link'>
