@@ -59,7 +59,7 @@ const Contacts = () => {
       cancelButtonText: "Annuler"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete("https://app-centre3001-api.vercel.app/contactCentre3001/contact/" + id, {
+        axios.delete("https://app-centre3001-api.vercel.app/gestion_contact/contact/" + id, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
@@ -122,7 +122,7 @@ const Contacts = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get("https://app-centre3001-api.vercel.app/contactCentre3001/contacts", {
+    axios.get("https://app-centre3001-api.vercel.app/gestion_contact/contacts", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }

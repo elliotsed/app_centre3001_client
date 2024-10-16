@@ -42,7 +42,7 @@ const AddContact = () => {
         e.preventDefault()
         // console.log(values)
 
-        axios.post("https://app-centre3001-api.vercel.app/contactCentre3001/add-contact", values, {
+        axios.post("https://app-centre3001-api.vercel.app/gestion_contact/add-contact", values, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }

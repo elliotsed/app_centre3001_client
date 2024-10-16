@@ -13,7 +13,7 @@ const HomeDashboard = () => {
     const [businessContacts, setBusinessContacts] = useState([]);
 
     useEffect(() => {
-        axios.get("https://app-centre3001-api.vercel.app/contactCentre3001/contacts", {
+        axios.get("https://app-centre3001-api.vercel.app/gestion_contact/contacts", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
