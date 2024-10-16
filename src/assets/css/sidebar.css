@@ -1,0 +1,139 @@
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: rgba(5, 121, 121);
+    border-left: 10px rgba(5, 121, 121);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation.active {
+    width: 70px;
+    
+}
+
+.activeLink {
+    background-color: var(--white);
+}
+
+.activeLink .sidebar-link {
+    color: rgba(5, 121, 121) !important;
+}
+
+.activeLink .sidebar-link:hover {
+    color: rgba(5, 121, 121) !important;
+    text-decoration: none !important;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+
+.navigation ul li .sidebar-link {
+    position: relative;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--white);
+}
+
+.navigation ul li:hover .sidebar-link {
+    text-decoration: underline;
+}
+
+
+.navigation ul li .sidebar-link .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 65px;
+    text-align: center;
+}
+
+.navigation ul li .sidebar-link .icon {
+    font-size: 1.6rem;
+}
+
+.navigation ul li .sidebar-link .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 55px;
+    text-align: start;
+    white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+
+.activeLink .sidebar-link::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.activeLink .sidebar-link::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+
+/* ====================== Responsive Design ========================== */
+@media (max-width: 991px) {
+    .navigation {
+        left: -300px;
+    }
+
+    .navigation.active {
+        width: 300px;
+        left: 0;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .navigation {
+        width: 100%;
+        left: -100%;
+        z-index: 1000;
+    }
+
+    .navigation.active {
+        width: 100%;
+        left: 0;
+    }
+
+}

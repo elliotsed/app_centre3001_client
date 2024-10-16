@@ -1,0 +1,99 @@
+.main {
+    position: absolute;
+    width: calc(100% - 300px);
+    left: 300px;
+    min-height: 100vh;
+    background: var(--white);
+    transition: 0.5s;
+}
+
+.main.active {
+    width: calc(100% - 70px);
+    left: 70px;
+}
+
+.add-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.add-form {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 500px;
+}
+
+.add-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    /* Espace entre les deux champs */
+}
+
+.add-form .form-group {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+/* .add-form .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+} */
+
+.add-form .form-group input {
+    width: 100%;
+    padding: 8px;
+    margin-left: 10px;
+    border: 0px;
+    border-bottom: 1px solid rgb(43, 42, 42);
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.add-form .form-group input::placeholder {
+    color: rgb(43, 42, 42);
+}
+
+.add-form .form-group input:focus {
+    outline: none;
+}
+
+.add-form .form-btn {
+    background-color: rgb(5, 121, 121);
+    color: #fff;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 6px;
+}
+
+.type-form-row {
+    margin-bottom: 5px;
+}
+
+.type-form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.type-form-group select {
+    background-color: #fff;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid black;
+}
