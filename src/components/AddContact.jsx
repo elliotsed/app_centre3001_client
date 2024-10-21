@@ -112,45 +112,45 @@ const AddContact = () => {
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Pays' className="form-control" name='country' required onChange={handleInput} />
+                            <input type="text" placeholder='Pays' className="form-control" name='country' onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Province' className="form-control" name='province' required onChange={handleInput} />
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <input type="text" placeholder='Adresse' className="form-control" name='address' required onChange={handleInput} />
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder='Code postal' className="form-control" name='postalCode' required onChange={handleInput} />
+                            <input type="text" placeholder='Province' className="form-control" name='province' onChange={handleInput} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Municipalité' className="form-control" name='municipality' required onChange={handleInput} />
+                            <input type="text" placeholder='Adresse' className="form-control" name='address' onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Date de naissance' className="form-control" name='birthday' required onFocus={(e) => e.target.type = "date"}
+                            <input type="text" placeholder='Code postal' className="form-control" name='postalCode' onChange={handleInput} />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <input type="text" placeholder='Municipalité' className="form-control" name='municipality' onChange={handleInput} />
+                        </div>
+                        <div className="form-group">
+                            <input type="text" placeholder='Date de naissance' className="form-control" name='birthday' onFocus={(e) => e.target.type = "date"}
                                 onBlur={(e) => e.target.type = "text"} onChange={handleInput} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Site web' className="form-control" name='website' required onChange={handleInput} />
+                            <input type="text" placeholder='Site web' className="form-control" name='website' onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Skype' className="form-control" name='skype' required onChange={handleInput} />
+                            <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} />
                         </div>
                     </div>
 
                     {values.contactType === 'business' && (
                         <div className="form-row">
                             <div className="form-group">
-                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' required onChange={handleInput} />
+                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} />
                             </div>
                             <div className="form-group">
-                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' required onChange={handleInput} />
+                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' onChange={handleInput} />
                             </div>
                         </div>
                     )}
