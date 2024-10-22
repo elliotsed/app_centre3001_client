@@ -254,6 +254,7 @@ const Contacts = () => {
                 <p><strong>Pays:</strong> <span>{selectedContact.country}</span></p>
                 <p><strong>Municipalité:</strong> <span>{selectedContact.municipality}</span></p>
                 <p><strong>Province:</strong> <span>{selectedContact.province}</span></p>
+                <p><strong>Commentaire:</strong> <span>{selectedContact.comment}</span></p>
               </div>
               <div className="contact-details-column">
                 <p><strong>Adresse:</strong> <span>{selectedContact.address}</span></p>

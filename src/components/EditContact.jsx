@@ -23,6 +23,7 @@ const EditContact = () => {
         website: "",
         skype: "",
         birthday: "",
+        comment: "",
         businessName: "",
         paymentMethod: ""
 
@@ -45,7 +46,7 @@ const EditContact = () => {
         e.preventDefault()
         // console.log(values)
 
-        axios.put("https://app-centre3001-api.vercel.app/gestion_contact/update-contact/"+id, values, {
+        axios.put("https://app-centre3001-api.vercel.app/gestion_contact/update-contact/" + id, values, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
@@ -90,6 +91,7 @@ const EditContact = () => {
                         website: res.data.website,
                         skype: res.data.skype,
                         birthday: res.data.birthday,
+                        comment: res.data.comment,
                         businessName: res.data.businessName,
                         paymentMethod: res.data.paymentMethod
                     })
@@ -133,61 +135,67 @@ const EditContact = () => {
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Nom' className="form-control" name='last_name' onChange={handleInput} value={values.last_name}/>
+                            <input type="text" placeholder='Nom' className="form-control" name='last_name' onChange={handleInput} value={values.last_name} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" onChange={handleInput} value={values.first_name}/>
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <input type="email" placeholder='Email' className="form-control" name='email' autoComplete='off' onChange={handleInput} value={values.email}/>
-                        </div>
-                        <div className="form-group">
-                            <input type="tel" placeholder='Téléphone' className="form-control" name='phone' onChange={handleInput} value={values.phone}/>
+                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" onChange={handleInput} value={values.first_name} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Pays' className="form-control" name='country' onChange={handleInput} value={values.country}/>
+                            <input type="email" placeholder='Email' className="form-control" name='email' autoComplete='off' onChange={handleInput} value={values.email} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Province' className="form-control" name='province' onChange={handleInput} value={values.province}/>
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <input type="text" placeholder='Adresse' className="form-control" name='address' onChange={handleInput} value={values.address}/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder='Code postal' className="form-control" name='postalCode' onChange={handleInput} value={values.postalCode}/>
+                            <input type="tel" placeholder='Téléphone' className="form-control" name='phone' onChange={handleInput} value={values.phone} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Municipalité' className="form-control" name='municipality' onChange={handleInput} value={values.municipality}/>
+                            <input type="text" placeholder='Pays' className="form-control" name='country' onChange={handleInput} value={values.country} />
+                        </div>
+                        <div className="form-group">
+                            <input type="text" placeholder='Province' className="form-control" name='province' onChange={handleInput} value={values.province} />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <input type="text" placeholder='Adresse' className="form-control" name='address' onChange={handleInput} value={values.address} />
+                        </div>
+                        <div className="form-group">
+                            <input type="text" placeholder='Code postal' className="form-control" name='postalCode' onChange={handleInput} value={values.postalCode} />
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <input type="text" placeholder='Municipalité' className="form-control" name='municipality' onChange={handleInput} value={values.municipality} />
                         </div>
                         <div className="form-group">
                             <input type="text" placeholder='Date de naissance' className="form-control" name='birthday' onFocus={(e) => e.target.type = "date"}
-                                onBlur={(e) => e.target.type = "text"} onChange={handleInput} value={values.birthday}/>
+                                onBlur={(e) => e.target.type = "text"} onChange={handleInput} value={values.birthday} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Site web' className="form-control" name='website' onChange={handleInput} value={values.website}/>
+                            <input type="text" placeholder='Site web' className="form-control" name='website' onChange={handleInput} value={values.website} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} value={values.skype}/>
+                            <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} value={values.skype} />
                         </div>
                     </div>
+                    <div className="form-row full-width">
+                        <div className="form-group">
+                            <textarea placeholder="Commentaire" className="form-control" name="comment" onChange={handleInput} value={values.comment} rows="5" />
+                        </div>
+                    </div>
+
 
                     {values.contactType === 'business' && (
                         <div className="form-row">
                             <div className="form-group">
-                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} value={values.businessName}/>
+                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} value={values.businessName} />
                             </div>
                             <div className="form-group">
-                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' onChange={handleInput} value={values.paymentMethod}/>
+                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' onChange={handleInput} value={values.paymentMethod} />
                             </div>
                         </div>
                     )}

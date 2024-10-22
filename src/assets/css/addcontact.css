@@ -97,3 +97,24 @@
     padding: 8px;
     border: 1px solid black;
 }
+
+.form-row.full-width {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.add-form .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 0px;
+    border-bottom: 1px solid rgb(43, 42, 42);
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    resize: vertical;
+    /* Permet de redimensionner verticalement */
+}
+
+.add-form .form-group textarea:focus {
+    outline: none;
+}

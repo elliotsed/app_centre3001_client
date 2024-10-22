@@ -23,6 +23,7 @@ const AddContact = () => {
         website: "",
         skype: "",
         birthday: "",
+        comment: "",
         businessName: "",
         paymentMethod: ""
 
@@ -143,6 +144,12 @@ const AddContact = () => {
                             <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} />
                         </div>
                     </div>
+                    <div className="form-row full-width">
+                        <div className="form-group">
+                            <textarea placeholder="Commentaire" className="form-control" name="comment" onChange={handleInput} rows="5" />
+                        </div>
+                    </div>
+
 
                     {values.contactType === 'business' && (
                         <div className="form-row">
