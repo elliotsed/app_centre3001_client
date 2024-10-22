@@ -254,12 +254,11 @@ const Contacts = () => {
                 <p><strong>Pays:</strong> <span>{selectedContact.country}</span></p>
                 <p><strong>Municipalité:</strong> <span>{selectedContact.municipality}</span></p>
                 <p><strong>Province:</strong> <span>{selectedContact.province}</span></p>
-                <p><strong>Commentaire:</strong> <span>{selectedContact.comment}</span></p>
-              </div>
-              <div className="contact-details-column">
                 <p><strong>Adresse:</strong> <span>{selectedContact.address}</span></p>
                 <p><strong>Code Postal:</strong> <span>{selectedContact.postalCode}</span></p>
                 <p><strong>Site internet:</strong> <span>{selectedContact.website}</span></p>
+              </div>
+              <div className="contact-details-column">
                 <p><strong>Skype:</strong> <span>{selectedContact.skype}</span></p>
                 <p><strong>Date de naissance:</strong> <span>{selectedContact.birthday}</span></p>
                 {selectedContact.contactType === "business" ?
@@ -269,6 +268,8 @@ const Contacts = () => {
                   </>
                   : <></>
                 }
+                <p><strong>Commentaire:</strong> <span>{selectedContact.comment}</span></p>
+
               </div>
 
             </div>

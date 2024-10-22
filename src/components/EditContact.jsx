@@ -182,12 +182,6 @@ const EditContact = () => {
                             <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} value={values.skype} />
                         </div>
                     </div>
-                    <div className="form-row full-width">
-                        <div className="form-group">
-                            <textarea placeholder="Commentaire" className="form-control" name="comment" onChange={handleInput} value={values.comment} rows="5" />
-                        </div>
-                    </div>
-
 
                     {values.contactType === 'business' && (
                         <div className="form-row">
@@ -199,6 +193,12 @@ const EditContact = () => {
                             </div>
                         </div>
                     )}
+
+                    <div className="form-row full-width">
+                        <div className="form-group">
+                            <textarea placeholder="Commentaire" className="form-control" name="comment" onChange={handleInput} value={values.comment} rows="5" />
+                        </div>
+                    </div>
 
                     <button className="form-btn">Modifier</button>
                 </form>
