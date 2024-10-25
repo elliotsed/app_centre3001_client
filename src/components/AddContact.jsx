@@ -97,18 +97,18 @@ const AddContact = () => {
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Nom' className="form-control" name='last_name' required onChange={handleInput} />
+                            <input type="text" placeholder='Nom' className="form-control" name='last_name' onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" required onChange={handleInput} />
+                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" onChange={handleInput} />
                         </div>
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="email" placeholder='Email' className="form-control" name='email' autoComplete='off' required onChange={handleInput} />
+                            <input type="email" placeholder='Email' className="form-control" name='email' autoComplete='off' onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="tel" placeholder='Téléphone' className="form-control" name='phone' required onChange={handleInput} />
+                            <input type="tel" placeholder='Téléphone' className="form-control" name='phone' onChange={handleInput} />
                         </div>
                     </div>
                     <div className="form-row">
