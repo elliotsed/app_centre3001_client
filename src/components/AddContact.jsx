@@ -97,10 +97,10 @@ const AddContact = () => {
                     </div>
                     <div className="form-row">
                         <div className="form-group">
-                            <input type="text" placeholder='Nom' className="form-control" name='last_name' onChange={handleInput} />
+                            <input type="text" placeholder='Nom' className="form-control" name='last_name' required onChange={handleInput} />
                         </div>
                         <div className="form-group">
-                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" onChange={handleInput} />
+                            <input type="text" placeholder='Prénom' className="form-control" name="first_name" required onChange={handleInput} />
                         </div>
                     </div>
                     <div className="form-row">
