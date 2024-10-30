@@ -46,6 +46,7 @@ const Contacts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedContact, setSelectedContact] = useState(null)
   const [filterType, setFilterType] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const deleteContact = (id) => {
     MySwal.fire({
@@ -152,12 +153,18 @@ const Contacts = () => {
   const { handleToggleClick } = useContext(DashboardContext);
 
   // Filtrer les contacts en fonction du type sélectionné
-  const filteredContacts = contacts.filter(contact => {
-    if (filterType === 'all') return true;
-    if (filterType === 'private') return contact.contactType === 'private';
-    if (filterType === 'business') return contact.contactType === 'business';
-    return true;
-  });
+  const filteredContacts = contacts
+    .filter(contact => {
+      if (filterType === 'all') return true;
+      return contact.contactType === filterType;
+    })
+    .filter(contact => {
+      return (
+        contact.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        contact.phone.includes(searchTerm)
+      );
+    });
 
 
   return (
@@ -168,17 +175,6 @@ const Contacts = () => {
             <div className="topbar">
               <div className="toggle" onClick={handleToggleClick}>
                 <GiHamburgerMenu />
-              </div>
-
-              <div className="search">
-                <label>
-                  <input type="text" placeholder="Search here" />
-                  <ion-icon name="search-outline"></ion-icon>
-                </label>
-              </div>
-
-              <div className="user">
-                <img src="assets/imgs/customer01.jpg" alt="" />
               </div>
             </div>
             <CircleLoader
@@ -195,16 +191,15 @@ const Contacts = () => {
               <div className="toggle" onClick={handleToggleClick}>
                 <GiHamburgerMenu />
               </div>
-              {/* <div className="search">
+              <div className="search">
                 <label>
-                  <input type="text" placeholder="Search here" />
-                  <ion-icon name="search-outline"></ion-icon>
+                  <input type="text"
+                    placeholder="Rechercher par nom, prénom ou téléphone"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                 </label>
               </div>
-
-              <div className="user">
-                <img src="assets/imgs/customer01.jpg" alt="" />
-              </div> */}
             </div>
 
             {contacts.length === 0 ? <></> :
