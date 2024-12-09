@@ -133,6 +133,18 @@ const EditContact = () => {
                             </select>
                         </div>
                     </div>
+                    
+                    {values.contactType === 'business' && (
+                        <div className="form-row">
+                            <div className="form-group">
+                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} value={values.businessName} />
+                            </div>
+                            <div className="form-group">
+                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' onChange={handleInput} value={values.paymentMethod} />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="form-row">
                         <div className="form-group">
                             <input type="text" placeholder='Nom' className="form-control" name='last_name' onChange={handleInput} value={values.last_name} />
@@ -182,18 +194,6 @@ const EditContact = () => {
                             <input type="text" placeholder='Skype' className="form-control" name='skype' onChange={handleInput} value={values.skype} />
                         </div>
                     </div>
-
-                    {values.contactType === 'business' && (
-                        <div className="form-row">
-                            <div className="form-group">
-                                <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} value={values.businessName} />
-                            </div>
-                            <div className="form-group">
-                                <input type="text" placeholder='Mode de paiement' className="form-control" name='paymentMethod' onChange={handleInput} value={values.paymentMethod} />
-                            </div>
-                        </div>
-                    )}
-
                     <div className="form-row full-width">
                         <div className="form-group">
                             <textarea placeholder="Commentaire" className="form-control" name="comment" onChange={handleInput} value={values.comment} rows="5" />

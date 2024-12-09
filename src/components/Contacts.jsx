@@ -162,7 +162,8 @@ const Contacts = () => {
       return (
         contact.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.phone.includes(searchTerm)
+        contact.phone.includes(searchTerm) ||
+        contact.businessName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
 
