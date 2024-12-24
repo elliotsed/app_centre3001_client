@@ -130,6 +130,7 @@ const EditContact = () => {
                             <select name="contactType" value={values.contactType} onChange={handleInput}>
                                 <option value="private">Privé</option>
                                 <option value="business">Entreprise</option>
+                                <option value="client">Client</option>
                             </select>
                         </div>
                     </div>

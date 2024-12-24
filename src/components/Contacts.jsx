@@ -105,7 +105,16 @@ const Contacts = () => {
     },
     {
       name: 'Type',
-      selector: row => row.contactType === 'business' ? 'Entreprise' : 'Privé',
+      selector: row => {
+        switch (row.contactType) {
+          case 'business':
+            return 'Entreprise';
+          case 'private':
+            return 'Privé';
+          case 'client':
+            return 'Client';
+        }
+      }
     },
     {
       name: 'Action',
@@ -214,6 +223,7 @@ const Contacts = () => {
                   <option value="all">Tous</option>
                   <option value="private">Privé</option>
                   <option value="business">Entreprise</option>
+                  <option value="client">Client</option>
                 </select>
               </div>
             }
