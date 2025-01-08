@@ -15,57 +15,66 @@ import Logout from './components/Logout'
 import ProtectedRoutes from './components/ProtectedRoutes'
 import NotFound from './pages/NotFound'
 import InvoicePage from './pages/Invoice/Invoice'
+import InvoiceUpdatePage from './pages/Invoice/InvoiceUpdatePage'
 
 export const UserContext = createContext(null);
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />
+    path: "/",
+    element: <Home />,
   },
   {
-    path: '/register',
-    element: <Register />
+    path: "/register",
+    element: <Register />,
   },
   {
-    path: '/login',
-    element: <Login />
+    path: "/login",
+    element: <Login />,
   },
   {
-    path: '/logout',
-    element: <Logout />
+    path: "/logout",
+    element: <Logout />,
   },
   {
-    path: '/dashboard',
-    element: <ProtectedRoutes><Dashboard /></ProtectedRoutes>,
+    path: "/dashboard",
+    element: (
+      <ProtectedRoutes>
+        <Dashboard />
+      </ProtectedRoutes>
+    ),
     children: [
       {
         index: true,
-        element: <HomeDashboard />
+        element: <HomeDashboard />,
       },
       {
-        path: '/dashboard/contacts',
-        element: <Contacts />
+        path: "/dashboard/contacts",
+        element: <Contacts />,
       },
       {
-        path: '/dashboard/add-contact',
-        element: <AddContact />
+        path: "/dashboard/add-contact",
+        element: <AddContact />,
       },
       {
-        path: '/dashboard/edit-contact/:id',
-        element: <EditContact />
+        path: "/dashboard/edit-contact/:id",
+        element: <EditContact />,
       },
-       {
-        path: '/dashboard/invoices',
-        element: <InvoicePage />
+      {
+        path: "/dashboard/facture",
+        element: <InvoicePage />,
       },
-    ]
+      {
+        path: "/dashboard/facture/:id",
+        element: <InvoiceUpdatePage />,
+      },
+    ],
   },
   {
-    path: '*',
-    element: <NotFound />
-  }
-])
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 const App = () => {
   const [user, setUser] = useState()
