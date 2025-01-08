@@ -17,7 +17,7 @@ const InvoiceRecord = ({ data }) => {
   } = data;
 
   return (
-    <div className=" shadow-md  font-sans md:mx-3 font-sans lg:mx-10 p-8 bg-white ">
+    <div className=" shadow-md  font-sans md:mx-3 font-sans p-8 bg-white ">
       {/* Header */}
       <div className="flex justify-between items-start mb-8">
         <div>

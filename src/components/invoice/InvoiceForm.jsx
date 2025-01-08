@@ -3,6 +3,7 @@ import axios from "axios";
 import html2pdf from "html2pdf.js";
 import { FaDownload } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { createInvoice } from "../../api/invoicesApi";
 import {
   DocumentIcon,
   ShoppingCartIcon,
@@ -12,12 +13,15 @@ import {
 import SummaryTable from "./SummaryTable";
 import InvoiceRecord from "./InvoiceReceipt";
 
-const InvoiceForm = () => {
-   const invoiceRef = useRef();
+const InvoiceForm = ({ emitEvent }) => {
+  const invoiceRef = useRef();
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
   const [download, setDownload] = useState(false);
   const [dataDownload, setDataDownload] = useState(false);
+
+
+  
   const [formData, setFormData] = useState({
     orderRef: "",
     orderDate: "",
@@ -50,7 +54,6 @@ const InvoiceForm = () => {
 
   const handleDownloadPDF = () => {
     const options = {
-      margin: 1,
       filename: `Invoice_${dataDownload.invoiceNumber}.pdf`,
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -121,7 +124,8 @@ const InvoiceForm = () => {
         newErrors[`product-${index}-unitPriceExclTax`] =
           "Prix unitaire est requis et superieur a 0.";
       if (!product.quantity || product.quantity < 0)
-        newErrors[`product-${index}-quantity`] = "Quantité est requise et superieur a 0.";
+        newErrors[`product-${index}-quantity`] =
+          "Quantité est requise et superieur a 0.";
       if (!product.taxRateOne || product.taxRateOne < 0)
         newErrors[`product-${index}-taxRateOne`] =
           "le taux de tax une est requise et superieur a 0.";
@@ -179,40 +183,58 @@ const InvoiceForm = () => {
   };
 
   const handlePrev = () => setStep((prevStep) => prevStep - 1);
-
-  const handleSubmit = (e) => {
+  const handleListInvoice = () => {
+     emitEvent();
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateStepThree()) {
       console.log("Form data submitted:", formData);
       // alert("Formulaire soumis avec succès !");
-      axios
-        .post("http://localhost:3000/gestion_contact/invoices", formData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then((res) => {
-          console.log("i am here", res);
-          setDataDownload(res.data?.data)
-          setDownload(true)
-          //  if (res.data.success) {
-          toast.success("Facture creer est telecharge", {
-            position: "top-right",
-            autoClose: 5000,
-          });
-
-          //  }
-        })
-        .catch((err) => {
-          //  if (err.response.data.errors) {
-
-          //  }
-          toast.error("une erreur", {
-            position: "top-right",
-            autoClose: 5000,
-          });
-          console.log("nous somme ici ", err);
+      try {
+        const response = await createInvoice(formData);
+        setDataDownload(response?.data);
+        setDownload(true);
+        toast.success("Facture creer est telecharge", {
+          position: "top-right",
+          autoClose: 5000,
         });
+      } catch (error) {
+        toast.error("une erreur", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+        console.log(error);
+      }
+
+      // axios
+      //   .post("http://localhost:3000/gestion_contact/invoices", formData, {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //     },
+      //   })
+      //   .then((res) => {
+      //     console.log("i am here", res);
+      //     setDataDownload(res.data?.data)
+      //     setDownload(true)
+      //     //  if (res.data.success) {
+      //     toast.success("Facture creer est telecharge", {
+      //       position: "top-right",
+      //       autoClose: 5000,
+      //     });
+
+      //     //  }
+      //   })
+      //   .catch((err) => {
+      //     //  if (err.response.data.errors) {
+
+      //     //  }
+      //     toast.error("une erreur", {
+      //       position: "top-right",
+      //       autoClose: 5000,
+      //     });
+      //     console.log("nous somme ici ", err);
+      //   });
     }
   };
 
@@ -225,13 +247,22 @@ const InvoiceForm = () => {
     { label: "Livraison", icon: <TruckIcon className="h-5 w-5" /> },
     { label: "Résumé", icon: <CheckCircleIcon className="h-5 w-5" /> },
   ];
-   
 
   return (
     <div className="md:bg-white p-2 md:p-8 font-sans mb-10 md:shadow-md rounded-lg md:mx-3 lg:mx-10">
-      <h2 className="text-xl md:text-2xl font-bold text-center md:text-start text-gray-700 mb-6">
-        Créer une facture
-      </h2>
+      <div className="flex  flex-col md:flex-row gap-3 justify-between">
+        <h2 className="text-xl md:text-2xl font-bold text-center md:text-start text-gray-700 mb-6">
+          Créer une facture
+        </h2>
+        <div>
+          <button
+            onClick={handleListInvoice}
+            className="bg-primaryColor text-white px-4 py-2 rounded hover:bg-opacity-80"
+          >
+            Liste de facture
+          </button>
+        </div>
+      </div>
 
       {/* Step Indicator */}
       {!download ? (
@@ -744,13 +775,15 @@ const InvoiceForm = () => {
         </>
       ) : (
         <>
-          <button
-            onClick={handleDownloadPDF}
-            className="flex items-center p-3 bg-primaryColor font-sans text-white rounded-lg hover:bg-opacity-80 transition duration-200 ease-in-out"
-          >
-            <FaDownload className="mr-2" />
-            Télécharger la facture en PDF
-          </button>
+          <div className="flex justify-end mb-3">
+            <button
+              onClick={handleDownloadPDF}
+              className="flex items-center p-3 bg-primaryColor font-sans text-white rounded-lg hover:bg-opacity-80 transition duration-200 ease-in-out"
+            >
+              <FaDownload className="mr-2" />
+              Télécharger
+            </button>
+          </div>
 
           <div ref={invoiceRef} className="invoice-container">
             <InvoiceRecord data={dataDownload} />
@@ -758,7 +791,6 @@ const InvoiceForm = () => {
         </>
       )}
     </div>
-    
   );
 };
 
