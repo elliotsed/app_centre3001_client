@@ -14,6 +14,7 @@ import EditContact from './components/EditContact'
 import Logout from './components/Logout'
 import ProtectedRoutes from './components/ProtectedRoutes'
 import NotFound from './pages/NotFound'
+import InvoicePage from './pages/Invoice/Invoice'
 
 export const UserContext = createContext(null);
 
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/edit-contact/:id',
         element: <EditContact />
+      },
+       {
+        path: '/dashboard/invoices',
+        element: <InvoicePage />
       },
     ]
   },

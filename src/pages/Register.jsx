@@ -27,7 +27,7 @@ const Register = () => {
         const errs = Validation(values)
         setErrors(errs)
         if (errs.name === "" && errs.email === "" && errs.password === "" && errs.password_confirm === "") {
-            axios.post("https://app-centre3001-api.vercel.app/gestion_contact/register", values)
+            axios.post("http://localhost:3000/gestion_contact/register", values)
                 .then(res => {
                     if (res.data.success) {
                         toast.success("Votre compte a été créé avec succès", {

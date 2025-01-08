@@ -50,7 +50,11 @@
     position: relative;
     width: 100%;
     display: flex;
+    align-items: center;
     text-decoration: none;
+    padding-left:20px ;
+    padding-right: 9;
+    height: 60px;
     color: var(--white);
 }
 
@@ -63,7 +67,7 @@
     position: relative;
     display: block;
     min-width: 60px;
-    height: 60px;
+    /* height: 60px; */
     line-height: 65px;
     text-align: center;
 }
@@ -74,10 +78,10 @@
 
 .navigation ul li .sidebar-link .title {
     position: relative;
-    display: block;
+    /* display: block; */
     padding: 0 10px;
-    height: 60px;
-    line-height: 55px;
+    /* height: 60px; */
+    /* line-height: 55px; */
     text-align: start;
     white-space: nowrap;
 }
