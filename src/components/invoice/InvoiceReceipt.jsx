@@ -19,9 +19,9 @@ const InvoiceRecord = ({ data }) => {
   return (
     <div className=" shadow-md  w-full font-sans md:mx-3 font-sans p-8 bg-white ">
       {/* Header */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-start mb-4">
         <div>
-          <h1 className="text-2xl font-bold mb-2">FACTURE</h1>
+          <h1 className="text-2xl font-bold mb-1">FACTURE</h1>
           <div className="text-black">
             <p>{new Date(issueDate).toLocaleDateString()}</p>
             <p className="font-semibold">#{invoiceNumber}</p>
@@ -35,9 +35,9 @@ const InvoiceRecord = ({ data }) => {
       </div>
 
       {/* Addresses */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="grid md:grid-cols-2 gap-8 mb-4">
         <div className=" p-4 ">
-          <h2 className="font-semibold mb-2">Adresse de livraison</h2>
+          <h2 className="font-semibold mb-1">Adresse de livraison</h2>
           <div className="text-black italic">
             <p>
               <span className="mr-2 font-medium">Noms: </span>
@@ -59,7 +59,7 @@ const InvoiceRecord = ({ data }) => {
           </div>
         </div>
         <div className=" p-4">
-          <h2 className="font-semibold mb-2 ">Adresse de facturation</h2>
+          <h2 className="font-semibold mb-1 ">Adresse de facturation</h2>
           <div className="text-black italic">
             <p>
               <span className="mr-2 font-medium">Noms: </span>
@@ -84,50 +84,54 @@ const InvoiceRecord = ({ data }) => {
 
       {/* Order Details */}
       <div className="mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-t-lg">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-2 rounded-t-lg">
           <div className="">
             <p className=" font-semibold text-black">Numéro de facture</p>
-            <p>#{invoiceNumber}</p>
+            <p className="text-sm">#{invoiceNumber}</p>
           </div>
           <div>
             <p className=" font-semibold text-black">Date de facturation</p>
-            <p>{new Date(issueDate).toLocaleDateString()}</p>
+            <p className="text-sm">
+              {new Date(issueDate).toLocaleDateString()}
+            </p>
           </div>
           <div>
             <p className=" font-semibold text-black">Réf. de commande</p>
-            <p>{orderRef}</p>
+            <p className="text-sm">{orderRef}</p>
           </div>
           <div>
             <p className=" font-semibold text-black">Date de commande</p>
-            <p>{new Date(orderDate).toLocaleDateString()}</p>
+            <p className="text-sm">
+              {new Date(orderDate).toLocaleDateString()}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Products Table */}
-      <div className="mb-8 overflow-x-auto">
+      <div className="mb-3 overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="bg-gray-100">
-              <th className="text-left p-4">Référence</th>
-              <th className="text-left p-4">Produit</th>
-              <th className="text-left p-4">Taux de taxe</th>
-              <th className="text-right p-4">Prix unitaire (HT)</th>
-              <th className="text-right p-4">Quantité</th>
-              <th className="text-right p-4">Total (HT)</th>
+              <th className="text-left p-2">Référence</th>
+              <th className="text-left p-2">Produit</th>
+              <th className="text-left p-2">Taux de taxe</th>
+              <th className="text-right p-2">Prix unitaire (HT)</th>
+              <th className="text-right p-2">Quantité</th>
+              <th className="text-right p-2">Total (HT)</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr key={product._id} className="border-b">
-                <td className="p-4">{product.reference}</td>
-                <td className="p-4">{product.name}</td>
-                <td className="p-4">
+              <tr key={product._id} className="border-b text-sm">
+                <td className="p-2">{product.reference}</td>
+                <td className="p-2">{product.name}</td>
+                <td className="p-2">
                   {product.taxRateOne}%, {product.taxRateTwo}%
                 </td>
-                <td className="text-right p-4">{product.unitPriceExclTax} $</td>
-                <td className="text-right p-4">{product.quantity}</td>
-                <td className="text-right p-4">{product.totalExclTax} $</td>
+                <td className="text-right p-2">{product.unitPriceExclTax} $</td>
+                <td className="text-right p-2">{product.quantity}</td>
+                <td className="text-right p-2">{product.totalExclTax} $</td>
               </tr>
             ))}
           </tbody>
@@ -141,9 +145,9 @@ const InvoiceRecord = ({ data }) => {
             <table className="w-full border-collapse border border-gray-300 text-sm text-center">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="text-left p-4"> Détail des taxes</th>
-                  <th className="text-left p-4">Taux de taxe</th>
-                  <th className="text-left p-4">Taxe totale</th>
+                  <th className="text-left p-2"> Détail des taxes</th>
+                  <th className="text-left p-2">Taux de taxe</th>
+                  <th className="text-left p-2">Taxe totale</th>
                 </tr>
               </thead>
               <tbody>
