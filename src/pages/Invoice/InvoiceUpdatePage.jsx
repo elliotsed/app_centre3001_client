@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react";
-import InvoiceForm from "../../components/invoice/InvoiceForm";
 import { DashboardContext } from "../Dashboard";
 import { GiHamburgerMenu } from "react-icons/gi";
-import InvoiceTable from "../../components/invoice/InvoiceTable";
+import InvoiceUpdate from "../../components/invoice/InvoiceUpdate";
 
-const InvoicePage = () => {
+const InvoiceUpdatePage = () => {
   const [page, setPage] = useState(true);
 
-  
   const { handleToggleClick } = useContext(DashboardContext);
   return (
     <div className="flex flex-col w-full gap-6">
@@ -16,15 +14,12 @@ const InvoicePage = () => {
       </div>
 
       <div>
-       
-       
-          {/* <InvoiceTable emitEvent={handleEventFromChild} /> */}
-       
-          <InvoiceTable />
-      
+        {/* <InvoiceTable emitEvent={handleEventFromChild} /> */}
+
+        <InvoiceUpdate />
       </div>
     </div>
   );
 };
 
-export default InvoicePage;
+export default InvoiceUpdatePage;

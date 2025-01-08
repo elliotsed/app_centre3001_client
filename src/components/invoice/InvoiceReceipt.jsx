@@ -17,7 +17,7 @@ const InvoiceRecord = ({ data }) => {
   } = data;
 
   return (
-    <div className=" shadow-md  font-sans md:mx-3 font-sans p-8 bg-white ">
+    <div className=" shadow-md  w-full font-sans md:mx-3 font-sans p-8 bg-white ">
       {/* Header */}
       <div className="flex justify-between items-start mb-8">
         <div>
@@ -87,7 +87,7 @@ const InvoiceRecord = ({ data }) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-t-lg">
           <div className="">
             <p className=" font-semibold text-black">Numéro de facture</p>
-            <p>{invoiceNumber}</p>
+            <p>#{invoiceNumber}</p>
           </div>
           <div>
             <p className=" font-semibold text-black">Date de facturation</p>

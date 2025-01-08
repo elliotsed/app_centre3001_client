@@ -6,8 +6,6 @@ const SummaryTable = ({ formData }) => {
       <div className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold text-gray-700">Résumé</h2>
 
-        {/* Order Details */}
-        {/* Delivery Address */}
         <div className="grid md:grid-cols-2 gap-3">
           <div className="flex flex-col gap-3">
             <h4 className="text-md font-medium text-gray-700">
@@ -84,7 +82,8 @@ const SummaryTable = ({ formData }) => {
                       Date de commande
                     </th>
                     <td className="border border-gray-300 px-4 py-2">
-                      {formData.orderDate}
+                     
+                      {new Date(formData.orderDate).toLocaleDateString()}
                     </td>
                   </tr>
                 </tbody>

@@ -1,9 +1,9 @@
 import React, {useRef , useState } from "react";
-import axios from "axios";
 import html2pdf from "html2pdf.js";
 import { FaDownload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { createInvoice } from "../../api/invoicesApi";
+import { FaTimes } from "react-icons/fa";
 import {
   DocumentIcon,
   ShoppingCartIcon,
@@ -13,7 +13,7 @@ import {
 import SummaryTable from "./SummaryTable";
 import InvoiceRecord from "./InvoiceReceipt";
 
-const InvoiceForm = ({ emitEvent }) => {
+const InvoiceForm = ({emitEvent}) => {
   const invoiceRef = useRef();
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
@@ -60,6 +60,26 @@ const InvoiceForm = ({ emitEvent }) => {
     };
     html2pdf().from(invoiceRef.current).set(options).save();
   };
+
+ const removeProduct = (indexToRemove) => {
+   setFormData((prevData) => {
+   
+     if (prevData.products.length <= 1) {
+       alert("vous devez avoir aumoins un produit")
+       return prevData;
+     }
+
+     // Create a new products array excluding the product at indexToRemove
+     const updatedProducts = prevData.products.filter(
+       (_, index) => index !== indexToRemove
+     );
+
+     return {
+       ...prevData,
+       products: updatedProducts,
+     };
+   });
+ };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -120,7 +140,7 @@ const InvoiceForm = ({ emitEvent }) => {
       if (!product.reference)
         newErrors[`product-${index}-reference`] = "Référence est requise.";
       if (!product.name) newErrors[`product-${index}-name`] = "Nom est requis.";
-      if (!product.unitPriceExclTax && product.unitPriceExclTax < 0)
+      if (!product.unitPriceExclTax || product.unitPriceExclTax < 0)
         newErrors[`product-${index}-unitPriceExclTax`] =
           "Prix unitaire est requis et superieur a 0.";
       if (!product.quantity || product.quantity < 0)
@@ -140,15 +160,13 @@ const InvoiceForm = ({ emitEvent }) => {
   const validateStepThree = () => {
     const newErrors = {};
 
-    // Validate carrierName
+
     if (!formData.carrierName)
       newErrors.carrierName = "Nom du transporteur est requis.";
 
-    // Validate shippingFees
     if (!formData.shippingFees && formData.shippingFees !== 0)
       newErrors.shippingFees = "Frais d'expédition sont requis.";
 
-    // Validate paymentMethod
     if (!formData.paymentMethod)
       newErrors.paymentMethod = "Méthode de paiement est requise.";
 
@@ -207,7 +225,7 @@ const InvoiceForm = ({ emitEvent }) => {
         console.log(error);
       }
 
-      // axios
+   
       //   .post("http://localhost:3000/gestion_contact/invoices", formData, {
       //     headers: {
       //       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -345,12 +363,21 @@ const InvoiceForm = ({ emitEvent }) => {
                     key={index}
                     className="border p-4 md:p-8 rounded-lg bg-white shadow"
                   >
-                    <h4 className="text-lg flex gap-3 font-semibold text-gray-600">
-                      <span className="w-5 h-5 text-white bg-primaryColor flex items-center justify-center p-4 rounded-full ">
-                        {index + 1}
-                      </span>
-                      Produit
-                    </h4>
+                    <div className="flex justify-between">
+                      <h4 className="text-lg flex gap-3 font-semibold text-gray-600">
+                        <span className="w-5 h-5 text-white bg-primaryColor flex items-center justify-center p-4 rounded-full ">
+                          {index + 1}
+                        </span>
+                        Produit
+                      </h4>
+                      <button
+                        onClick={()=> removeProduct(index)}
+                        className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+                      >
+                        <FaTimes size={20} />
+                      </button>
+                    </div>
+
                     <div className="grid md:grid-cols-2 gap-4 mt-2">
                       <div className="flex flex-col gap-2">
                         <label className="block text-sm font-medium text-gray-700">
