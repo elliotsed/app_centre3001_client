@@ -35,27 +35,64 @@ const InvoiceTable = () => {
     fetchData();
   }, []);
 
+  // const handleDownloadPDF = (invoice) => {
+  //   const element = invoiceRefs.current[invoice._id];
+  //   if (!element) return;
+
+  //   const options = {
+  //     filename: `Invoice_${invoice.invoiceNumber}.pdf`,
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+  //   };
+
+ 
+  //   setPdfVisible(true);
+
+    
+  //   html2pdf().from(element).set(options).save();
+
+   
+  //   setTimeout(() => {
+  //     setPdfVisible(false);
+  //   }, 3000); // 3000ms = 3 seconds
+  // };
   const handleDownloadPDF = (invoice) => {
     const element = invoiceRefs.current[invoice._id];
     if (!element) return;
 
     const options = {
       filename: `Invoice_${invoice.invoiceNumber}.pdf`,
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      html2canvas: {
+        scale: 2, // Increase the scale for better quality
+      },
+      jsPDF: {
+        unit: "mm", // Use millimeters for measurements
+        format: "a4", // Set page format to A4
+        orientation: "portrait", // Portrait orientation
+        // margin: [10, 10, 10, 10], // Add some margin around the content
+      },
+      // Additional option to ensure the content fits into a single page
+      pagebreak: { mode: "avoid" }, // Avoid page breaks (optional)
     };
-
-    // Show the PDF preview
+    // Show the loading overlay
     setPdfVisible(true);
 
-    // Generate the PDF
-    html2pdf().from(element).set(options).save();
-
-    // Hide the PDF preview after 3 seconds
-    setTimeout(() => {
-      setPdfVisible(false);
-    }, 3000); // 3000ms = 3 seconds
+    // Generate the PDF and set a callback when it's finished
+    html2pdf()
+      .from(element)
+      .set(options)
+      .save()
+      .then(() => {
+        // Hide the overlay after the download is completed
+        setPdfVisible(false);
+      })
+      .catch((error) => {
+        console.error("Error generating PDF:", error);
+        // Hide the overlay even if there was an error
+        setPdfVisible(false);
+      });
   };
+
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
