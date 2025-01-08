@@ -40,20 +40,20 @@ const InvoiceRecord = ({ data }) => {
           <h2 className="font-semibold mb-1">Adresse de livraison</h2>
           <div className="text-black italic">
             <p>
-              <span className="mr-2 font-medium">Noms: </span>
+              <span className="mr-2 font-medium text-sm">Noms: </span>
               {deliveryAddress.name}
             </p>
             <p>
-              <span className="mr-2 font-medium">Addresse: </span>
+              <span className="mr-2 font-medium text-sm">Addresse: </span>
               {deliveryAddress.postalCode} ,{deliveryAddress.address}
             </p>
             <p>
-              <span className="mr-2 font-medium">Ville: </span>{" "}
+              <span className="mr-2 font-medium text-sm">Ville: </span>{" "}
               {deliveryAddress.city} {deliveryAddress.province}
             </p>
             <p>
               {" "}
-              <span className="mr-2 font-medium">Pays: </span>{" "}
+              <span className="mr-2 font-medium text-sm">Pays: </span>{" "}
               {deliveryAddress.country}
             </p>
           </div>
@@ -62,20 +62,20 @@ const InvoiceRecord = ({ data }) => {
           <h2 className="font-semibold mb-1 ">Adresse de facturation</h2>
           <div className="text-black italic">
             <p>
-              <span className="mr-2 font-medium">Noms: </span>
+              <span className="mr-2 font-medium text-sm">Noms: </span>
               {deliveryAddress.name}
             </p>
             <p>
-              <span className="mr-2 font-medium">Addresse: </span>
+              <span className="mr-2 font-medium text-sm">Addresse: </span>
               {deliveryAddress.postalCode} ,{deliveryAddress.address}
             </p>
             <p>
-              <span className="mr-2 font-medium">Ville: </span>{" "}
+              <span className="mr-2 font-medium text-sm">Ville: </span>{" "}
               {deliveryAddress.city} {deliveryAddress.province}
             </p>
             <p>
               {" "}
-              <span className="mr-2 font-medium">Pays: </span>{" "}
+              <span className="mr-2 font-medium text-sm">Pays: </span>{" "}
               {deliveryAddress.country}
             </p>
           </div>
@@ -83,11 +83,11 @@ const InvoiceRecord = ({ data }) => {
       </div>
 
       {/* Order Details */}
-      <div className="mb-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-2 rounded-t-lg">
+      <div className="mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-t-lg">
           <div className="">
             <p className=" font-semibold text-black">Numéro de facture</p>
-            <p className="text-sm">#{invoiceNumber}</p>
+            <p className="text-sm ">#{invoiceNumber}</p>
           </div>
           <div>
             <p className=" font-semibold text-black">Date de facturation</p>
@@ -109,7 +109,7 @@ const InvoiceRecord = ({ data }) => {
       </div>
 
       {/* Products Table */}
-      <div className="mb-3 overflow-x-auto">
+      <div className="mb-4 overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="bg-gray-100">
@@ -140,7 +140,7 @@ const InvoiceRecord = ({ data }) => {
 
       {/* Summary */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 w-2/3  gap-3">
           <div className="flex flex-col gap-2">
             <table className="w-full border-collapse border border-gray-300 text-sm text-center">
               <thead>
@@ -155,14 +155,18 @@ const InvoiceRecord = ({ data }) => {
                   <td className=" px-4 py-2 ">Produits</td>
                   <td className=" px-4 py-2 ">{products[0].taxRateTwo}</td>
                   <td className="px-4 py-2">
-                    {totalProductsExclTax * (products[0].taxRateTwo / 100)} $
+                    {totalProductsExclTax *
+                      (products[0].taxRateTwo / 100).toFixed(2)}{" "}
+                    $
                   </td>
                 </tr>
                 <tr>
                   <td className=" px-4 py-2 "></td>
                   <td className=" px-4 py-2 ">{products[0].taxRateOne}</td>
                   <td className="px-4 py-2">
-                    {totalProductsExclTax * (products[0].taxRateOne / 100)} $
+                    {totalProductsExclTax *
+                      (products[0].taxRateOne / 100).toFixed(2)}
+                    $
                   </td>
                 </tr>
               </tbody>
@@ -191,7 +195,7 @@ const InvoiceRecord = ({ data }) => {
             </table>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col w-1/3 gap-2">
           <table className="w-full border-collapse border border-gray-300 text-sm text-right  ">
             <tbody className="">
               <tr className="">
