@@ -139,7 +139,7 @@ const InvoiceRecord = ({ data }) => {
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* <div className="grid grid-cols-2 gap-3">
         <div className="grid grid-cols-1 gap-3">
           <div className="flex flex-col gap-2">
             <table className="w-full border-collapse border border-gray-300 text-sm text-center">
@@ -227,6 +227,104 @@ const InvoiceRecord = ({ data }) => {
               <tr>
                 <th className=" px-4 py-2 bg-gray-100 text-gray-700">Total</th>
                 <td className=" px-4 py-2">{totalInclTax} $</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="w-2/3 col-span-2">
+          <div className="flex flex-col gap-2">
+            <table className="w-full border-collapse border border-gray-300 text-sm text-center">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="text-left p-2">Détail des taxes</th>
+                  <th className="text-left p-2">Taux de taxe</th>
+                  <th className="text-left p-2">Taxe totale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="px-4 py-2">Produits</td>
+                  <td className="px-4 py-2">{products[0].taxRateTwo}</td>
+                  <td className="px-4 py-2">
+                    {(
+                      totalProductsExclTax *
+                      (products[0].taxRateTwo / 100)
+                    ).toFixed(2)}{" "}
+                    $
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2"></td>
+                  <td className="px-4 py-2">{products[0].taxRateOne}</td>
+                  <td className="px-4 py-2">
+                    {(
+                      totalProductsExclTax *
+                      (products[0].taxRateOne / 100)
+                    ).toFixed(2)}{" "}
+                    $
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="flex flex-col gap-2">
+            <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+              <tbody>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Moyen de paiement
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {paymentMethod} - {totalInclTax} $
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Transporteur
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {carrierName}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="w-1/3">
+          <table className="w-full border-collapse border border-gray-300 text-sm text-right">
+            <tbody>
+              <tr>
+                <th className="font-normal px-4 py-3 bg-gray-100 text-gray-700">
+                  Total produits
+                </th>
+                <td className="px-4 py-2">{totalProductsExclTax} $</td>
+              </tr>
+              <tr>
+                <th className="font-normal px-4 py-3 bg-gray-100 text-gray-700">
+                  Frais de livraison
+                </th>
+                <td className="px-4 py-2">
+                  {shippingFees === 0 ? "gratuit" : `${shippingFees} $`}
+                </td>
+              </tr>
+              <tr>
+                <th className="px-4 py-3 bg-gray-100 text-gray-700">
+                  Total (HT)
+                </th>
+                <td className="px-4 py-2">{totalProductsExclTax} $</td>
+              </tr>
+              <tr>
+                <th className="px-4 py-3 bg-gray-100 text-gray-700">
+                  Taxe totale
+                </th>
+                <td className="px-4 py-2">{totalTax} $</td>
+              </tr>
+              <tr>
+                <th className="px-4 py-2 bg-gray-100 text-gray-700">Total</th>
+                <td className="px-4 py-2">{totalInclTax} $</td>
               </tr>
             </tbody>
           </table>
