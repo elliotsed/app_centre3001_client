@@ -27,7 +27,7 @@ const Login = () => {
         const errs = Validation(values)
         setErrors(errs)
         if (errs.email === "" && errs.password === "") {
-            axios.post("https://app-centre3001-api.vercel.app/gestion_contact/login", values)
+            axios.post("http://localhost:3000/gestion_contact/login", values)
                 .then(res => {
                     if (res.data.success) {
                         toast.success("Connexion réussie", {
@@ -42,7 +42,7 @@ const Login = () => {
                     if (err.response.data.errors) {
                         setServerErrors(err.response.data.errors)
                     }
-                    console.log(err)
+                    console.log("nous somme ici ",err.response)
                 })
         }
     }
