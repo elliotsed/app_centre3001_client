@@ -5,7 +5,6 @@ import { fetchInvoices } from "../../api/invoicesApi";
 import { Link } from "react-router-dom";
 import InvoiceForm from "./InvoiceForm";
 import InvoiceRecord from "./InvoiceReceipt";
-import ReactDOM from "react-dom/client";
 import html2pdf from "html2pdf.js";
 
 const InvoiceTable = () => {
@@ -80,7 +79,7 @@ const InvoiceTable = () => {
 
   const indexOfLastInvoice = currentPage * itemsPerPage;
   const indexOfFirstInvoice = indexOfLastInvoice - itemsPerPage;
-  const currentInvoices = filteredInvoices.slice(
+  const currentInvoices = filteredInvoices?.slice(
     indexOfFirstInvoice,
     indexOfLastInvoice
   );
