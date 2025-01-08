@@ -119,13 +119,13 @@ const Contacts = () => {
     {
       name: 'Action',
       selector: row => (
-        <>
+        <div className="action-icons">
           <FaEye className='table-icon1' onClick={() => handleEditClick(row)} />
           <Link to={`/dashboard/edit-contact/${row._id}`}>
             <FaPenToSquare className='table-icon2' />
           </Link>
           <FaRegTrashCan className='table-icon3' onClick={() => deleteContact(row._id)} />
-        </>
+        </div>
       ),
     },
   ];
