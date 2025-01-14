@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaEdit, FaDownload } from "react-icons/fa";
+import { FaEdit,FaEye, FaDownload } from "react-icons/fa";
 import { Rings } from "react-loader-spinner";
 import { fetchInvoices } from "../../api/invoicesApi";
 import { Link } from "react-router-dom";
@@ -35,27 +35,7 @@ const InvoiceTable = () => {
     fetchData();
   }, []);
 
-  // const handleDownloadPDF = (invoice) => {
-  //   const element = invoiceRefs.current[invoice._id];
-  //   if (!element) return;
-
-  //   const options = {
-  //     filename: `Invoice_${invoice.invoiceNumber}.pdf`,
-  //     html2canvas: { scale: 2 },
-  //     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-  //   };
-
  
-  //   setPdfVisible(true);
-
-    
-  //   html2pdf().from(element).set(options).save();
-
-   
-  //   setTimeout(() => {
-  //     setPdfVisible(false);
-  //   }, 3000); // 3000ms = 3 seconds
-  // };
   const handleDownloadPDF = (invoice) => {
     const element = invoiceRefs.current[invoice._id];
     if (!element) return;
@@ -63,21 +43,20 @@ const InvoiceTable = () => {
     const options = {
       filename: `Invoice_${invoice.invoiceNumber}.pdf`,
       html2canvas: {
-        scale: 2, // Increase the scale for better quality
+        scale: 2, 
       },
       jsPDF: {
-        unit: "mm", // Use millimeters for measurements
-        format: "a4", // Set page format to A4
-        orientation: "portrait", // Portrait orientation
-        // margin: [10, 10, 10, 10], // Add some margin around the content
+        unit: "mm", 
+        format: "a4", 
+        orientation: "portrait", 
+   
       },
-      // Additional option to ensure the content fits into a single page
-      pagebreak: { mode: "avoid" }, // Avoid page breaks (optional)
+
+      pagebreak: { mode: "avoid" }, 
     };
-    // Show the loading overlay
+   
     setPdfVisible(true);
 
-    // Generate the PDF and set a callback when it's finished
     html2pdf()
       .from(element)
       .set(options)
@@ -208,6 +187,13 @@ const InvoiceTable = () => {
                               >
                                 <InvoiceRecord data={invoice} />
                               </div>
+                              <Link
+                                to={`/dashboard/view-facture/${invoice._id}`}
+                              >
+                                <button className="text-primaryColor hover:text-blue-700 mr-4">
+                                  <FaEye />
+                                </button>
+                              </Link>
 
                               <Link to={`/dashboard/facture/${invoice._id}`}>
                                 <button
@@ -238,7 +224,7 @@ const InvoiceTable = () => {
                       disabled={currentPage === 1}
                       className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
                     >
-                      Previous
+                      Précédent
                     </button>
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
@@ -248,7 +234,7 @@ const InvoiceTable = () => {
                       }
                       className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
                     >
-                      Next
+                      Suivant
                     </button>
                   </div>
                 </>
