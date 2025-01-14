@@ -7,6 +7,7 @@ const InvoiceRecord = ({ data }) => {
     orderRef,
     orderDate,
     deliveryAddress,
+    billingAddress,
     products,
     carrierName,
     shippingFees,
@@ -18,7 +19,6 @@ const InvoiceRecord = ({ data }) => {
 
   return (
     <div className=" shadow-md  w-full font-sans md:mx-3 font-sans p-8 bg-white ">
-      {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div>
           <h1 className="text-2xl font-bold mb-1">FACTURE</h1>
@@ -29,8 +29,8 @@ const InvoiceRecord = ({ data }) => {
         </div>
         <div className="text-right">
           <img src="/api/placeholder/150/50" alt="Logo" className="mb-2" />
-          <p>{deliveryAddress.name}</p>
-          <p>{deliveryAddress.address}</p>
+          <p>Auris Canada </p>
+          <p>Pro-Actif</p>
         </div>
       </div>
 
@@ -44,18 +44,29 @@ const InvoiceRecord = ({ data }) => {
               {deliveryAddress.name}
             </p>
             <p>
-              <span className="mr-2 font-medium text-sm">Addresse: </span>
-              {deliveryAddress.postalCode} ,{deliveryAddress.address}
+              <span className="mr-2 font-medium text-sm">
+                {" "}
+                Numéro de porte et Rue:{" "}
+              </span>
+              {deliveryAddress.doorNumberStreet}
             </p>
             <p>
-              <span className="mr-2 font-medium text-sm">Ville: </span>{" "}
-              {deliveryAddress.city} {deliveryAddress.province}
+              <span className="mr-2 font-medium text-sm">
+                Municipalité et Code postal:{" "}
+              </span>{" "}
+              {deliveryAddress.municipalityPostalCode}
             </p>
             <p>
-              {" "}
-              <span className="mr-2 font-medium text-sm">Pays: </span>{" "}
-              {deliveryAddress.country}
+              <span className="mr-2 font-medium text-sm">
+                Pays et Province:{" "}
+              </span>{" "}
+              {deliveryAddress.provinceCountry}
             </p>
+            <p>
+              <span className="mr-2 font-medium text-sm">Telephone: </span>{" "}
+              {deliveryAddress.telephone}
+            </p>
+            <p>{deliveryAddress.extraInfo}</p>
           </div>
         </div>
         <div className=" p-4">
@@ -63,21 +74,31 @@ const InvoiceRecord = ({ data }) => {
           <div className="text-black italic">
             <p>
               <span className="mr-2 font-medium text-sm">Noms: </span>
-              {deliveryAddress.name}
+              {billingAddress.name}
             </p>
             <p>
-              <span className="mr-2 font-medium text-sm">Addresse: </span>
-              {deliveryAddress.postalCode} ,{deliveryAddress.address}
+              <span className="mr-2 font-medium text-sm">
+                Numéro de porte et Rue:{" "}
+              </span>
+              {billingAddress.doorNumberStreet}
             </p>
             <p>
-              <span className="mr-2 font-medium text-sm">Ville: </span>{" "}
-              {deliveryAddress.city} {deliveryAddress.province}
+              <span className="mr-2 font-medium text-sm">
+                Municipalité et Code postal:{" "}
+              </span>{" "}
+              {billingAddress.municipalityPostalCode}
             </p>
             <p>
-              {" "}
-              <span className="mr-2 font-medium text-sm">Pays: </span>{" "}
-              {deliveryAddress.country}
+              <span className="mr-2 font-medium text-sm">
+                Pays et Province:{" "}
+              </span>{" "}
+              {billingAddress.provinceCountry}
             </p>
+            <p>
+              <span className="mr-2 font-medium text-sm">Telephone: </span>{" "}
+              {billingAddress.telephone}
+            </p>
+            <p>{billingAddress.extraInfo}</p>
           </div>
         </div>
       </div>
@@ -146,32 +167,25 @@ const InvoiceRecord = ({ data }) => {
               <thead>
                 <tr className="bg-gray-100">
                   <th className="text-left p-2"> Détail des taxes</th>
-                  <th className="text-left p-2">Taux de taxe</th>
-                  <th className="text-left p-2">Taxe totale</th>
+                  <th className="text-left p-2">Type de taxe</th>
+                  <th className="text-left p-2">Numero</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className=" px-4 py-2 ">Produits</td>
-                  <td className=" px-4 py-2 ">{products[0].taxRateTwo}</td>
-                  <td className="px-4 py-2">
-                    {totalProductsExclTax *
-                      (products[0].taxRateTwo / 100).toFixed(2)}{" "}
-                    $
-                  </td>
+                  <td className=" px-4 py-2 ">TVQ</td>
+                  <td className="px-4 py-2">1202201306TQ003</td>
                 </tr>
                 <tr>
                   <td className=" px-4 py-2 "></td>
-                  <td className=" px-4 py-2 ">{products[0].taxRateOne}</td>
-                  <td className="px-4 py-2">
-                    {totalProductsExclTax *
-                      (products[0].taxRateOne / 100).toFixed(2)}
-                    $
-                  </td>
+                  <td className=" px-4 py-2 ">TPS </td>
+                  <td className="px-4 py-2">1202201306TQ003</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
           <div className="flex flex-col gap-2">
             <table className="w-full border-collapse border border-gray-300 text-sm text-left">
               <tbody>
@@ -232,14 +246,13 @@ const InvoiceRecord = ({ data }) => {
           </table>
         </div>
       </div>
-      
 
       {/* Footer */}
       <div className="mt-8 pt-8 border-t text-center text-black text-sm">
         <p className="mb-2">
           Pour Total (HT)toute assistance, merci de nous contacter :
         </p>
-        <p>Tél. : 1877 545 19 99</p>
+        <p>Tél. : +1 877 545 19 99 , +1 418 246 19 99</p>
       </div>
     </div>
   );

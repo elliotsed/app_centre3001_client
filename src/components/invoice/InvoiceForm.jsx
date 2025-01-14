@@ -9,6 +9,7 @@ import {
   ShoppingCartIcon,
   TruckIcon,
   CheckCircleIcon,
+  CreditCardIcon,
 } from "@heroicons/react/outline";
 import SummaryTable from "./SummaryTable";
 import InvoiceRecord from "./InvoiceReceipt";
@@ -17,11 +18,10 @@ const InvoiceForm = ({emitEvent}) => {
   const invoiceRef = useRef();
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
+  const [showDelivery,setShowDelivery] = useState(false);
   const [download, setDownload] = useState(false);
   const [dataDownload, setDataDownload] = useState(false);
-
-
-  
+ 
   const [formData, setFormData] = useState({
     orderRef: "",
     orderDate: "",
@@ -44,11 +44,19 @@ const InvoiceForm = ({emitEvent}) => {
     totalInclTax: 0,
     deliveryAddress: {
       name: "",
-      address: "",
-      city: "",
-      province: "",
-      postalCode: "",
-      country: "",
+      doorNumberStreet: "",
+      provinceCountry: "",
+      municipalityPostalCode: "",
+      extraInfo: "",
+      telephone: 0,
+    },
+    billingAddress: {
+      name: "",
+      doorNumberStreet: "",
+      provinceCountry: "",
+      municipalityPostalCode: "",
+      extraInfo: "",
+      telephone: 0,
     },
   });
 
@@ -69,7 +77,7 @@ const InvoiceForm = ({emitEvent}) => {
        return prevData;
      }
 
-     // Create a new products array excluding the product at indexToRemove
+  
      const updatedProducts = prevData.products.filter(
        (_, index) => index !== indexToRemove
      );
@@ -80,6 +88,11 @@ const InvoiceForm = ({emitEvent}) => {
      };
    });
  };
+
+ const handleIdentique = () => {
+  formData.deliveryAddress = formData.billingAddress
+  setShowDelivery(!showDelivery)
+ }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -159,7 +172,31 @@ const InvoiceForm = ({emitEvent}) => {
 
   const validateStepThree = () => {
     const newErrors = {};
+    if (!formData.billingAddress.name)
+      newErrors.billingAddressName = "Le nom est requis.";
+    if (!formData.billingAddress.doorNumberStreet)
+      newErrors.billingAddressDoorNumberStreet =
+        "Le Numéro de porte et la Rue sont requisent.";
+    if (!formData.billingAddress.provinceCountry)
+      newErrors.billingAddressProvinceCountry =
+        "Le Pays et la Province sont requisent.";
+    if (!formData.billingAddress.municipalityPostalCode)
+      newErrors.billingAddressMunicipalityPostalCode =
+        "La Municipalité et le Code postal sont requisent.";
+    if (
+      !formData.billingAddress.telephone ||
+      formData.billingAddress.telephone < 0
+    )
+      newErrors.billingAddressTelephone = "Le numero de telephone est requis.";
 
+    // Set the error messages
+    setErrors(newErrors);
+
+    // Return whether there are any errors
+    return Object.keys(newErrors).length === 0;
+  };
+  const validateStepFour = () => {
+    const newErrors = {};
 
     if (!formData.carrierName)
       newErrors.carrierName = "Nom du transporteur est requis.";
@@ -170,24 +207,27 @@ const InvoiceForm = ({emitEvent}) => {
     if (!formData.paymentMethod)
       newErrors.paymentMethod = "Méthode de paiement est requise.";
 
-    // Validate deliveryAddress fields
     if (!formData.deliveryAddress.name)
       newErrors.deliveryAddressName = "Le nom est requis.";
-    if (!formData.deliveryAddress.address)
-      newErrors.deliveryAddressAddress = "L'adresse est requise.";
-    if (!formData.deliveryAddress.city)
-      newErrors.deliveryAddressCity = "La ville est requise.";
-    if (!formData.deliveryAddress.province)
-      newErrors.deliveryAddressProvince = "La province est requise.";
-    if (!formData.deliveryAddress.postalCode)
-      newErrors.deliveryAddressPostalCode = "Le code postal est requis.";
-    if (!formData.deliveryAddress.country)
-      newErrors.deliveryAddressCountry = "Le pays est requis.";
+    if (!formData.deliveryAddress.doorNumberStreet)
+      newErrors.deliveryAddressDoorNumberStreet =
+        "Le Numéro de porte et la Rue sont requisent.";
+    if (!formData.deliveryAddress.provinceCountry)
+      newErrors.deliveryAddressProvinceCountry =
+        "Le Pays et la Province sont requisent.";
+    if (!formData.deliveryAddress.municipalityPostalCode)
+      newErrors.deliveryAddressMunicipalityPostalCode =
+        "La Municipalité et le Code postal sont requisent.";
+    if (
+      !formData.deliveryAddress.telephone ||
+      formData.deliveryAddress.telephone < 0
+    )
+      newErrors.deliveryAddressTelephone = "Le numero de telephone est requis.";
+
 
     // Set the error messages
     setErrors(newErrors);
 
-    // Return whether there are any errors
     return Object.keys(newErrors).length === 0;
   };
 
@@ -196,6 +236,7 @@ const InvoiceForm = ({emitEvent}) => {
     if (step === 1) isValid = validateStepOne();
     if (step === 2) isValid = validateStepTwo();
     if (step === 3) isValid = validateStepThree();
+    if (step === 4) isValid = validateStepFour();
 
     if (isValid) setStep((prevStep) => prevStep + 1);
   };
@@ -208,7 +249,7 @@ const InvoiceForm = ({emitEvent}) => {
     e.preventDefault();
     if (validateStepThree()) {
       console.log("Form data submitted:", formData);
-      // alert("Formulaire soumis avec succès !");
+ 
       try {
         const response = await createInvoice(formData);
         setDataDownload(response?.data);
@@ -225,43 +266,17 @@ const InvoiceForm = ({emitEvent}) => {
         console.log(error);
       }
 
-   
-      //   .post("http://localhost:3000/gestion_contact/invoices", formData, {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log("i am here", res);
-      //     setDataDownload(res.data?.data)
-      //     setDownload(true)
-      //     //  if (res.data.success) {
-      //     toast.success("Facture creer est telecharge", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //     });
-
-      //     //  }
-      //   })
-      //   .catch((err) => {
-      //     //  if (err.response.data.errors) {
-
-      //     //  }
-      //     toast.error("une erreur", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //     });
-      //     console.log("nous somme ici ", err);
-      //   });
+  
     }
   };
 
   const steps = [
-    { label: "Détails commande", icon: <DocumentIcon className="h-5 w-5" /> },
+    { label: "Commande", icon: <DocumentIcon className="h-5 w-5" /> },
     {
-      label: "Détails produit",
+      label: "Produit",
       icon: <ShoppingCartIcon className="h-5 w-5" />,
     },
+    { label: "Facturation", icon: <CreditCardIcon className="h-5 w-5" /> },
     { label: "Livraison", icon: <TruckIcon className="h-5 w-5" /> },
     { label: "Résumé", icon: <CheckCircleIcon className="h-5 w-5" /> },
   ];
@@ -314,6 +329,9 @@ const InvoiceForm = ({emitEvent}) => {
             {/* Step 1 */}
             {step === 1 && (
               <div className="space-y-6">
+                <h3 className="font-sans font-semibold text-gray-700">
+                  Detail de Commande :
+                </h3>
                 <div className="flex flex-col gap-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Référence de commande
@@ -371,7 +389,7 @@ const InvoiceForm = ({emitEvent}) => {
                         Produit
                       </h4>
                       <button
-                        onClick={()=> removeProduct(index)}
+                        onClick={() => removeProduct(index)}
                         className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
                       >
                         <FaTimes size={20} />
@@ -465,7 +483,7 @@ const InvoiceForm = ({emitEvent}) => {
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="block text-sm font-medium text-gray-700">
-                          Taux De taxe une
+                          TPS
                         </label>
                         <input
                           type="number"
@@ -486,7 +504,7 @@ const InvoiceForm = ({emitEvent}) => {
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="block text-sm font-medium text-gray-700">
-                          Taux De taxe deux
+                          TVQ
                         </label>
                         <input
                           type="number"
@@ -521,187 +539,386 @@ const InvoiceForm = ({emitEvent}) => {
             {/* Step 3 */}
             {step === 3 && (
               <div className="space-y-6">
+                <h3 className="font-sans font-semibold text-gray-700">
+                  Address de Facturation :
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Nom
+                      Nom complet
                     </label>
                     <input
                       type="text"
                       name="name"
-                      value={formData.deliveryAddress.name}
+                      value={formData.billingAddress.name}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
+                          ...formData.billingAddress,
                           name: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressName
+                        errors.billingAddressName
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
-                    {errors.deliveryAddressName && (
+                    {errors.billingAddressName && (
                       <p className="text-sm text-red-500">
-                        {errors.deliveryAddressName}
+                        {errors.billingAddressName}
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Adresse
+                      Numéro de porte et Rue
                     </label>
                     <input
                       type="text"
-                      name="address"
-                      value={formData.deliveryAddress.address}
+                      name="doorNumberStreet"
+                      value={formData.billingAddress.doorNumberStreet}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
-                          address: e.target.value,
+                          ...formData.billingAddress,
+                          doorNumberStreet: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressAddress
+                        errors.billingAddressDoorNumberStreet
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
-                    {errors.deliveryAddressAddress && (
+                    {errors.billingAddressDoorNumberStreet && (
                       <p className="text-sm text-red-500">
-                        {errors.deliveryAddressAddress}
+                        {errors.billingAddressDoorNumberStreet}
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Ville
+                      Municipalité et Code postal
                     </label>
                     <input
                       type="text"
-                      name="city"
-                      value={formData.deliveryAddress.city}
+                      name="municipalityPostalCode"
+                      value={formData.billingAddress.municipalityPostalCode}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
-                          city: e.target.value,
+                          ...formData.billingAddress,
+                          municipalityPostalCode: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressCity
+                        errors.billingAddressMunicipalityPostalCode
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
-                    {errors.deliveryAddressCity && (
+                    {errors.billingAddressMunicipalityPostalCode && (
                       <p className="text-sm text-red-500">
-                        {errors.deliveryAddressCity}
+                        {errors.billingAddressMunicipalityPostalCode}
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Province
+                      Pays et Province
                     </label>
                     <input
                       type="text"
-                      name="province"
-                      value={formData.deliveryAddress.province}
+                      name="provinceCountry"
+                      value={formData.billingAddress.provinceCountry}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
-                          province: e.target.value,
+                          ...formData.billingAddress,
+                          provinceCountry: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressProvince
+                        errors.billingAddressProvinceCountry
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
                     {<errors className="deliveryAddressProvince"></errors> && (
                       <p className="text-sm text-red-500">
-                        {errors.deliveryAddressProvince}
+                        {errors.billingAddressProvinceCountry}
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Code Postal
+                      Téléphone
                     </label>
                     <input
-                      type="text"
-                      name="postalCode"
-                      value={formData.deliveryAddress.postalCode}
+                      type="number"
+                      name="telephone"
+                      value={formData.billingAddress.telephone}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
-                          postalCode: e.target.value,
+                          ...formData.billingAddress,
+                          telephone: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressPostalCode
+                        errors.billingAddressTelephone
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
-                    {errors.deliveryAddressPostalCode && (
+                    {errors.billingAddressTelephone && (
                       <p className="text-sm text-red-500">
-                        {errors.deliveryAddressPostalCode}
+                        {errors.billingAddressTelephone}
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Pays
+                      Autre
                     </label>
                     <input
                       type="text"
-                      name="country"
-                      value={formData.deliveryAddress.country}
+                      name="extraInfo"
+                      value={formData.billingAddress.extraInfo}
                       onChange={(e) => {
                         const updatedAddress = {
-                          ...formData.deliveryAddress,
-                          country: e.target.value,
+                          ...formData.billingAddress,
+                          extraInfo: e.target.value,
                         };
                         setFormData({
                           ...formData,
-                          deliveryAddress: updatedAddress,
+                          billingAddress: updatedAddress,
                         });
                       }}
-                      className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.deliveryAddressCountry
-                          ? " ring-2 ring-red-500 "
-                          : "border-gray-300 focus:ring-2 focus:ring-brightColor "
-                      }`}
+                      className="w-full px-4 py-2 border rounded-lg outline-none"
                     />
-                    {errors.deliveryAddressCountry && (
-                      <p className="text-sm text-red-500">
-                        {errors.deliveryAddressCountry}
-                      </p>
-                    )}
                   </div>
+                </div>
+              </div>
+            )}
+            {step === 4 && (
+              <div className="space-y-6">
+                <h3 className="font-sans font-semibold text-gray-700">
+                  Address de Livraison :
+                </h3>
+                <div className="flex gap-3 items-center justify-end">
+                  <button
+                    className="px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-opacity-80 cursor-pointer"
+                    onClick={handleIdentique}
+                    type="button"
+                  >
+                    identique
+                  </button>
+                  <p className="text-xs italic">
+                    Si l'adresse de livraison est égale à l'adresse de
+                    facturation, cliquez sur le bouton
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {showDelivery ? (
+                    <></>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Nom complet
+                        </label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.deliveryAddress.name}
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              name: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                            errors.deliveryAddressName
+                              ? " ring-2 ring-red-500 "
+                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                          }`}
+                        />
+                        {errors.deliveryAddressName && (
+                          <p className="text-sm text-red-500">
+                            {errors.deliveryAddressName}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Numéro de porte et Rue
+                        </label>
+                        <input
+                          type="text"
+                          name="doorNumberStreet"
+                          value={formData.deliveryAddress.doorNumberStreet}
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              doorNumberStreet: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                            errors.deliveryAddressDoorNumberStreet
+                              ? " ring-2 ring-red-500 "
+                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                          }`}
+                        />
+                        {errors.deliveryAddressDoorNumberStreet && (
+                          <p className="text-sm text-red-500">
+                            {errors.deliveryAddressDoorNumberStreet}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Municipalité et Code postal
+                        </label>
+                        <input
+                          type="text"
+                          name="municipalityPostalCode"
+                          value={
+                            formData.deliveryAddress.municipalityPostalCode
+                          }
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              municipalityPostalCode: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                            errors.deliveryAddressMunicipalityPostalCode
+                              ? " ring-2 ring-red-500 "
+                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                          }`}
+                        />
+                        {errors.deliveryAddressMunicipalityPostalCode && (
+                          <p className="text-sm text-red-500">
+                            {errors.deliveryAddressMunicipalityPostalCode}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Pays et Province
+                        </label>
+                        <input
+                          type="text"
+                          name="provinceCountry"
+                          value={formData.deliveryAddress.provinceCountry}
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              provinceCountry: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                            errors.deliveryAddressProvinceCountry
+                              ? " ring-2 ring-red-500 "
+                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                          }`}
+                        />
+                        {(
+                          <errors className="deliveryAddressProvince"></errors>
+                        ) && (
+                          <p className="text-sm text-red-500">
+                            {errors.deliveryAddressProvinceCountry}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Téléphone
+                        </label>
+                        <input
+                          type="number"
+                          name="telephone"
+                          value={formData.deliveryAddress.telephone}
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              telephone: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                            errors.deliveryAddressTelephone
+                              ? " ring-2 ring-red-500 "
+                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                          }`}
+                        />
+                        {errors.deliveryAddressTelephone && (
+                          <p className="text-sm text-red-500">
+                            {errors.deliveryAddressTelephone}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Autre
+                        </label>
+                        <input
+                          type="text"
+                          name="extraInfo"
+                          value={formData.deliveryAddress.extraInfo}
+                          onChange={(e) => {
+                            const updatedAddress = {
+                              ...formData.deliveryAddress,
+                              extraInfo: e.target.value,
+                            };
+                            setFormData({
+                              ...formData,
+                              deliveryAddress: updatedAddress,
+                            });
+                          }}
+                          className="w-full px-4 py-2 border rounded-lg outline-none"
+                        />
+                      </div>
+                    </>
+                  )}
+
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
                       Transporteur
@@ -768,7 +985,7 @@ const InvoiceForm = ({emitEvent}) => {
                 </div>
               </div>
             )}
-            {step === 4 && <SummaryTable formData={formData} />}
+            {step === 5 && <SummaryTable formData={formData} />}
 
             <div className="flex justify-between mt-8">
               {step > 1 && (
@@ -780,7 +997,7 @@ const InvoiceForm = ({emitEvent}) => {
                   Précédent
                 </button>
               )}
-              {step < 4 && (
+              {step < 5 && (
                 <button
                   type="button"
                   onClick={handleNext}
@@ -789,7 +1006,7 @@ const InvoiceForm = ({emitEvent}) => {
                   Suivant
                 </button>
               )}
-              {step === 4 && (
+              {step === 5 && (
                 <button
                   type="submit"
                   className="px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-opacity-80"

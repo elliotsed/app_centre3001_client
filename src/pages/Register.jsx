@@ -27,21 +27,23 @@ const Register = () => {
         const errs = Validation(values)
         setErrors(errs)
         if (errs.name === "" && errs.email === "" && errs.password === "" && errs.password_confirm === "") {
-            axios.post("https://app-centre3001-api.vercel.app/gestion_contact/register", values)
-                .then(res => {
-                    if (res.data.success) {
-                        toast.success("Votre compte a été créé avec succès", {
-                            position: "top-right",
-                            autoClose: 5000
-                        });
-                        navigate("/login")
-                    }
-                }).catch(err => {
-                    if (err.response.data.errors) {
-                        setServerErrors(err.response.data.errors)
-                    }
-                    console.log(err)
-                })
+            axios
+              .post("http://localhost:3000/gestion_contact/register", values)
+              .then((res) => {
+                if (res.data.success) {
+                  toast.success("Votre compte a été créé avec succès", {
+                    position: "top-right",
+                    autoClose: 5000,
+                  });
+                  navigate("/login");
+                }
+              })
+              .catch((err) => {
+                if (err.response.data.errors) {
+                  setServerErrors(err.response.data.errors);
+                }
+                console.log(err);
+              });
         }
     }
 

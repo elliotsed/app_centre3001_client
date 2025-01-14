@@ -16,6 +16,7 @@ import ProtectedRoutes from './components/ProtectedRoutes'
 import NotFound from './pages/NotFound'
 import InvoicePage from './pages/Invoice/Invoice'
 import InvoiceUpdatePage from './pages/Invoice/InvoiceUpdatePage'
+import InvoiceViewOne from './pages/Invoice/InvoiceViewOne'
 
 export const UserContext = createContext(null);
 
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/facture",
         element: <InvoicePage />,
+      },
+      {
+        path: "/dashboard/view-facture/:id",
+        element: <InvoiceViewOne />,
       },
       {
         path: "/dashboard/facture/:id",
