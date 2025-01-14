@@ -180,7 +180,7 @@ const InvoiceRecord = ({ data }) => {
                 <tr>
                   <td className=" px-4 py-2 "></td>
                   <td className=" px-4 py-2 ">TPS </td>
-                  <td className="px-4 py-2">1202201306TQ003</td>
+                  <td className="px-4 py-2">1446407 1RT001</td>
                 </tr>
               </tbody>
             </table>
