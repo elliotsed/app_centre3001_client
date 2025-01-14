@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
 import { DashboardContext } from "../Dashboard";
 import { GiHamburgerMenu } from "react-icons/gi";
-import InvoiceUpdate from "../../components/invoice/InvoiceUpdate";
+import InvoiceVisible from "../../components/invoice/InvoiceVisible";
 
-const InvoiceUpdatePage = () => {
+
+const InvoiceViewOne = () => {
 
 
   const { handleToggleClick } = useContext(DashboardContext);
@@ -14,12 +15,11 @@ const InvoiceUpdatePage = () => {
       </div>
 
       <div>
-      
 
-        <InvoiceUpdate />
+        <InvoiceVisible />
       </div>
     </div>
   );
 };
 
-export default InvoiceUpdatePage;
+export default InvoiceViewOne;

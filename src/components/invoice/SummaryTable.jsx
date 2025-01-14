@@ -23,105 +23,161 @@ const SummaryTable = ({ formData }) => {
                 </tr>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Adresse
+                    Numéro de porte et Rue
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {formData.deliveryAddress.address}
+                    {formData.deliveryAddress.doorNumberStreet}
                   </td>
                 </tr>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Ville
+                    Municipalité et Code postal
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {formData.deliveryAddress.city}
+                    {formData.deliveryAddress.municipalityPostalCode}
                   </td>
                 </tr>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Province
+                    Pays et Province
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {formData.deliveryAddress.province}
+                    {formData.deliveryAddress.provinceCountry}
                   </td>
                 </tr>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Code Postal
+                    Téléphone
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {formData.deliveryAddress.postalCode}
+                    {formData.deliveryAddress.telephone}
                   </td>
                 </tr>
                 <tr>
                   <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Pays
+                    Autre
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {formData.deliveryAddress.country}
+                    {formData.deliveryAddress.extraInfo}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="flex flex-col gap-3">
+            <h4 className="text-md font-medium text-gray-700">
+              Adresse de facturation
+            </h4>
+            <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+              <tbody>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Nom
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.name}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Numéro de porte et Rue
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.doorNumberStreet}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Municipalité et Code postal
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.municipalityPostalCode}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Pays et Province
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.provinceCountry}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Téléphone
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.telephone}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Autre
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.billingAddress.extraInfo}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="flex flex-col gap-2">
+            <h4 className="text-md font-medium text-gray-700">Expédition</h4>
+            <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+              <tbody>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Transporteur
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.carrierName}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Frais de livraison
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.shippingFees
+                      ? formData.shippingFees
+                      : "Pas de frais"}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Moyen de paiement
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.paymentMethod}
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="flex flex-col gap-2">
-              <h4 className="text-md font-medium text-gray-700">Commande</h4>
-              <table className="w-full border-collapse border border-gray-300 text-sm text-left">
-                <tbody>
-                  <tr>
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                      Référence de commande
-                    </th>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {formData.orderRef}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                      Date de commande
-                    </th>
-                    <td className="border border-gray-300 px-4 py-2">
-                     
-                      {new Date(formData.orderDate).toLocaleDateString()}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="flex flex-col gap-2">
-              <h4 className="text-md font-medium text-gray-700">Expédition</h4>
-              <table className="w-full border-collapse border border-gray-300 text-sm text-left">
-                <tbody>
-                  <tr>
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                      Transporteur
-                    </th>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {formData.carrierName}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                      Frais de livraison
-                    </th>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {formData.shippingFees
-                        ? formData.shippingFees
-                        : "Pas de frais"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                      Moyen de paiement
-                    </th>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {formData.paymentMethod}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <h4 className="text-md font-medium text-gray-700">Commande</h4>
+            <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+              <tbody>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Référence de commande
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.orderRef}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Date de commande
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {new Date(formData.orderDate).toLocaleDateString()}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
