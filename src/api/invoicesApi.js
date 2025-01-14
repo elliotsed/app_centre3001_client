@@ -1,7 +1,8 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/gestion_contact/invoices';
+
+const API_BASE_URL = 'https://app-centre3001-api.vercel.app/gestion_contact/invoices';
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
 
 export const fetchInvoices = async () => {

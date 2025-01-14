@@ -248,7 +248,6 @@ const InvoiceUpdate = () => {
     e.preventDefault();
     if (validateStepThree()) {
       console.log("Form data submitted:", formData);
-      // alert("Formulaire soumis avec succès !");
       try {
         const response = await updateInvoice(id,formData);
         setDataDownload(response?.data);
@@ -266,33 +265,6 @@ const InvoiceUpdate = () => {
       }
 
     
-      //   .post("http://localhost:3000/gestion_contact/invoices", formData, {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //   })
-      //   .then((res) => {
-      //     console.log("i am here", res);
-      //     setDataDownload(res.data?.data)
-      //     setDownload(true)
-      //     //  if (res.data.success) {
-      //     toast.success("Facture creer est telecharge", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //     });
-
-      //     //  }
-      //   })
-      //   .catch((err) => {
-      //     //  if (err.response.data.errors) {
-
-      //     //  }
-      //     toast.error("une erreur", {
-      //       position: "top-right",
-      //       autoClose: 5000,
-      //     });
-      //     console.log("nous somme ici ", err);
-      //   });
     }
   };
 
