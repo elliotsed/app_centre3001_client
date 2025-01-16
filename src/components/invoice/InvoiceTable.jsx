@@ -24,7 +24,8 @@ const InvoiceTable = () => {
         const response = await fetchInvoices();
         console.log("les datas", response.data);
         setInvoices(response.data?.reverse());
-        setFilteredInvoices(response.data);
+        setFilteredInvoices(response.data?.reverse());
+        console.log("voici filtre",filteredInvoices)
       } catch (error) {
         console.error("Error fetching invoices:", error);
       } finally {
@@ -134,7 +135,7 @@ const InvoiceTable = () => {
                 </button>
               </div>
 
-              {filteredInvoices.length === 0 ? (
+              {filteredInvoices?.length === 0 ? (
                 <div className="text-center text-lg text-gray-500">
                   Aucune facture disponible
                 </div>
@@ -162,7 +163,7 @@ const InvoiceTable = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentInvoices.map((invoice, index) => (
+                        {currentInvoices?.map((invoice, index) => (
                           <tr key={index} className="hover:bg-gray-50">
                             <td className="px-6 py-4 border border-gray-300">
                               {invoice.invoiceNumber}
@@ -230,7 +231,7 @@ const InvoiceTable = () => {
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={
                         currentPage ===
-                        Math.ceil(filteredInvoices.length / itemsPerPage)
+                        Math.ceil(filteredInvoices?.length / itemsPerPage)
                       }
                       className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
                     >

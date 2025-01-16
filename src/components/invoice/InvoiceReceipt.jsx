@@ -52,7 +52,7 @@ const InvoiceRecord = ({ data }) => {
         </div>
         <div className=" p-4">
           <h2 className="font-semibold mb-1 ">Adresse de facturation</h2>
-          <div className="text-black italic">
+          <div className="text-black  italic">
             <p>{billingAddress.name}</p>
             <p>{billingAddress.doorNumberStreet}</p>
             <p>{billingAddress.municipalityPostalCode}</p>

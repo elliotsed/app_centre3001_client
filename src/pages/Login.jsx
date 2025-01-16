@@ -28,7 +28,10 @@ const Login = () => {
         setErrors(errs)
         if (errs.email === "" && errs.password === "") {
             axios
-              .post("http://localhost:3000/gestion_contact/login", values)
+              .post(
+                "https://app-centre3001-api.vercel.app/gestion_contact/login",
+                values
+              )
               .then((res) => {
                 if (res.data.success) {
                   toast.success("Connexion réussie", {
