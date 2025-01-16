@@ -211,7 +211,7 @@ const SummaryTable = ({ formData }) => {
                   {product.unitPriceExclTax}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {product.taxRateOne}, {product.taxRateTwo}
+                  {formData.taxRateOne}, {formData.taxRateTwo}
                 </td>
               </tr>
             ))}

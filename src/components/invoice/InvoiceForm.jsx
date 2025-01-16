@@ -31,13 +31,14 @@ const InvoiceForm = ({emitEvent}) => {
         name: "",
         unitPriceExclTax: "",
         quantity: "",
-        taxRateOne: 0,
-        taxRateTwo: 0,
         totalExclTax: "",
       },
     ],
     carrierName: "",
     shippingFees: 0,
+    taxRateOne: 0,
+    taxRateTwo: 0,
+    taxRate: 0,
     paymentMethod: "",
     totalProductsExclTax: 0,
     totalTax: 0,
@@ -128,8 +129,6 @@ const InvoiceForm = ({emitEvent}) => {
           name: "",
           unitPriceExclTax: "",
           quantity: "",
-          taxRateOne: "",
-          taxRateTwo: "",
           totalExclTax: "",
         },
       ],
@@ -159,12 +158,12 @@ const InvoiceForm = ({emitEvent}) => {
       if (!product.quantity || product.quantity < 0)
         newErrors[`product-${index}-quantity`] =
           "Quantité est requise et superieur a 0.";
-      if (!product.taxRateOne || product.taxRateOne < 0)
-        newErrors[`product-${index}-taxRateOne`] =
-          "le taux de tax une est requise et superieur a 0.";
-      if (!product.taxRateTwo || product.taxRateTwo < 0)
-        newErrors[`product-${index}-taxRateTwo`] =
-          "le taux de tax deux est requise et superieur a 0.";
+      if (!formData.taxRateOne || formData.taxRateOne < 0)
+        newErrors.taxRateOne =
+          "le taux de tax tvq une est requise et superieur a 0.";
+      if (!formData.taxRateTwo || formData.taxRateTwo < 0)
+        newErrors.taxRateTwo =
+          "le taux de tax tps deux est requise et superieur a 0.";
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -488,8 +487,8 @@ const InvoiceForm = ({emitEvent}) => {
                         <input
                           type="number"
                           name="taxRateOne"
-                          value={product.taxRateOne}
-                          onChange={(e) => handleProductChange(index, e)}
+                          value={formData.taxRateOne}
+                          onChange={(e) => handleChange(index, e)}
                           className={`w-full px-4 py-2 border rounded-lg outline-none ${
                             errors[`product-${index}-taxRateOne`]
                               ? " ring-2 ring-red-500 "
