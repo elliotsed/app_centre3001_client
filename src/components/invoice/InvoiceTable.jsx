@@ -135,7 +135,7 @@ const InvoiceTable = () => {
                 </button>
               </div>
 
-              {filteredInvoices?.length === 0 ? (
+              {filteredInvoices?.length === 0 || filteredInvoices == undefined ? (
                 <div className="text-center text-lg text-gray-500">
                   Aucune facture disponible
                 </div>
