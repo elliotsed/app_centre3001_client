@@ -65,24 +65,23 @@ const InvoiceUpdate = () => {
     },
   });
 
+  const removeProduct = (indexToRemove) => {
+    setFormData((prevData) => {
+      if (prevData.products.length <= 1) {
+        alert("vous devez avoir aumoins un produit");
+        return prevData;
+      }
 
-   const removeProduct = (indexToRemove) => {
-     setFormData((prevData) => {
-       if (prevData.products.length <= 1) {
-         alert("vous devez avoir aumoins un produit");
-         return prevData;
-       }
+      const updatedProducts = prevData.products.filter(
+        (_, index) => index !== indexToRemove
+      );
 
-       const updatedProducts = prevData.products.filter(
-         (_, index) => index !== indexToRemove
-       );
-
-       return {
-         ...prevData,
-         products: updatedProducts,
-       };
-     });
-   };
+      return {
+        ...prevData,
+        products: updatedProducts,
+      };
+    });
+  };
   const handleIdentique = () => {
     formData.deliveryAddress = formData.billingAddress;
     setShowDelivery(!showDelivery);
