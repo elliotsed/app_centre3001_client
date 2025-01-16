@@ -1,4 +1,4 @@
-import React, {useRef , useState } from "react";
+import React, { useRef, useState } from "react";
 import html2pdf from "html2pdf.js";
 import { FaDownload } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -14,14 +14,14 @@ import {
 import SummaryTable from "./SummaryTable";
 import InvoiceRecord from "./InvoiceReceipt";
 
-const InvoiceForm = ({emitEvent}) => {
+const InvoiceForm = ({ emitEvent }) => {
   const invoiceRef = useRef();
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
-  const [showDelivery,setShowDelivery] = useState(false);
+  const [showDelivery, setShowDelivery] = useState(false);
   const [download, setDownload] = useState(false);
   const [dataDownload, setDataDownload] = useState(false);
- 
+
   const [formData, setFormData] = useState({
     orderRef: "",
     orderDate: "",
@@ -70,30 +70,28 @@ const InvoiceForm = ({emitEvent}) => {
     html2pdf().from(invoiceRef.current).set(options).save();
   };
 
- const removeProduct = (indexToRemove) => {
-   setFormData((prevData) => {
-   
-     if (prevData.products.length <= 1) {
-       alert("vous devez avoir aumoins un produit")
-       return prevData;
-     }
+  const removeProduct = (indexToRemove) => {
+    setFormData((prevData) => {
+      if (prevData.products.length <= 1) {
+        alert("vous devez avoir aumoins un produit");
+        return prevData;
+      }
 
-  
-     const updatedProducts = prevData.products.filter(
-       (_, index) => index !== indexToRemove
-     );
+      const updatedProducts = prevData.products.filter(
+        (_, index) => index !== indexToRemove
+      );
 
-     return {
-       ...prevData,
-       products: updatedProducts,
-     };
-   });
- };
+      return {
+        ...prevData,
+        products: updatedProducts,
+      };
+    });
+  };
 
- const handleIdentique = () => {
-  formData.deliveryAddress = formData.billingAddress
-  setShowDelivery(!showDelivery)
- }
+  const handleIdentique = () => {
+    formData.deliveryAddress = formData.billingAddress;
+    setShowDelivery(!showDelivery);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -148,6 +146,12 @@ const InvoiceForm = ({emitEvent}) => {
 
   const validateStepTwo = () => {
     const newErrors = {};
+    if (!formData.taxRateOne || formData.taxRateOne < 0)
+      newErrors.taxRateOne =
+        "le taux de tax tps une est requise et superieur a 0.";
+    if (!formData.taxRateTwo || formData.taxRateTwo < 0)
+      newErrors.taxRateTwo =
+        "le taux de tax tvq deux est requise et superieur a 0.";
     formData.products.forEach((product, index) => {
       if (!product.reference)
         newErrors[`product-${index}-reference`] = "Référence est requise.";
@@ -158,12 +162,6 @@ const InvoiceForm = ({emitEvent}) => {
       if (!product.quantity || product.quantity < 0)
         newErrors[`product-${index}-quantity`] =
           "Quantité est requise et superieur a 0.";
-      if (!formData.taxRateOne || formData.taxRateOne < 0)
-        newErrors.taxRateOne =
-          "le taux de tax tvq une est requise et superieur a 0.";
-      if (!formData.taxRateTwo || formData.taxRateTwo < 0)
-        newErrors.taxRateTwo =
-          "le taux de tax tps deux est requise et superieur a 0.";
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -223,7 +221,6 @@ const InvoiceForm = ({emitEvent}) => {
     )
       newErrors.deliveryAddressTelephone = "Le numero de telephone est requis.";
 
-
     // Set the error messages
     setErrors(newErrors);
 
@@ -242,13 +239,13 @@ const InvoiceForm = ({emitEvent}) => {
 
   const handlePrev = () => setStep((prevStep) => prevStep - 1);
   const handleListInvoice = () => {
-     emitEvent();
+    emitEvent();
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateStepThree()) {
       console.log("Form data submitted:", formData);
- 
+
       try {
         const response = await createInvoice(formData);
         setDataDownload(response?.data);
@@ -264,8 +261,6 @@ const InvoiceForm = ({emitEvent}) => {
         });
         console.log(error);
       }
-
-  
     }
   };
 
@@ -375,6 +370,55 @@ const InvoiceForm = ({emitEvent}) => {
             {/* Step 2 */}
             {step === 2 && (
               <div className="space-y-6">
+                <div className="grid gird-cols-1 gap-3 items-center">
+                  <h4 className="text-lg flex gap-3 font-semibold text-gray-600">
+                    Taxe
+                  </h4>
+                  <div className="grid grid-cols-1  md:grid-cols-2 gap-3 items-center">
+                    <div className="flex flex-col gap-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        TPS
+                      </label>
+                      <input
+                        type="number"
+                        name="taxRateOne"
+                        value={formData.taxRateOne}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                          errors.taxRateOne
+                            ? " ring-2 ring-red-500 "
+                            : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                        }`}
+                      />
+                      {errors.taxRateOne && (
+                        <p className="text-sm text-red-500">
+                          {errors.taxRateOne}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        TVQ
+                      </label>
+                      <input
+                        type="number"
+                        name="taxRateTwo"
+                        value={formData.taxRateTwo}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                          errors.taxRateTwo
+                            ? " ring-2 ring-red-500 "
+                            : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                        }`}
+                      />
+                      {errors.taxRateTwo && (
+                        <p className="text-sm text-red-500">
+                          {errors.taxRateTwo}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 {formData.products.map((product, index) => (
                   <div
                     key={index}
@@ -477,48 +521,6 @@ const InvoiceForm = ({emitEvent}) => {
                         {errors[`product-${index}-quantity`] && (
                           <p className="text-sm text-red-500">
                             {errors[`product-${index}-quantity`]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          TPS
-                        </label>
-                        <input
-                          type="number"
-                          name="taxRateOne"
-                          value={formData.taxRateOne}
-                          onChange={(e) => handleChange(index, e)}
-                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                            errors[`product-${index}-taxRateOne`]
-                              ? " ring-2 ring-red-500 "
-                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
-                          }`}
-                        />
-                        {errors[`product-${index}-taxRateOne`] && (
-                          <p className="text-sm text-red-500">
-                            {errors[`product-${index}-taxRateOne`]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          TVQ
-                        </label>
-                        <input
-                          type="number"
-                          name="taxRateTwo"
-                          value={product.taxRateTwo}
-                          onChange={(e) => handleProductChange(index, e)}
-                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                            errors[`product-${index}-taxRateTwo`]
-                              ? " ring-2 ring-red-500 "
-                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
-                          }`}
-                        />
-                        {errors[`product-${index}-taxRateTwo`] && (
-                          <p className="text-sm text-red-500">
-                            {errors[`product-${index}-taxRateTwo`]}
                           </p>
                         )}
                       </div>
