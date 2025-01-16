@@ -22,10 +22,10 @@ const InvoiceUpdate = () => {
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
   const [download, setDownload] = useState(false);
-  const [showDelivery,setShowDelivery] = useState(false);
+  const [showDelivery, setShowDelivery] = useState(false);
   const [dataDownload, setDataDownload] = useState(false);
   const { id } = useParams();
- 
+
   const [formData, setFormData] = useState({
     orderRef: "",
     orderDate: "",
@@ -35,13 +35,14 @@ const InvoiceUpdate = () => {
         name: "",
         unitPriceExclTax: "",
         quantity: "",
-        taxRateOne: 0,
-        taxRateTwo: 0,
         totalExclTax: "",
       },
     ],
     carrierName: "",
     shippingFees: 0,
+    taxRateOne: 0,
+    taxRateTwo: 0,
+    taxRate: 0,
     paymentMethod: "",
     totalProductsExclTax: 0,
     totalTax: 0,
@@ -65,28 +66,41 @@ const InvoiceUpdate = () => {
   });
 
 
- const handleIdentique = () => {
-   formData.deliveryAddress = formData.billingAddress;
-   setShowDelivery(!showDelivery);
- };
+   const removeProduct = (indexToRemove) => {
+     setFormData((prevData) => {
+       if (prevData.products.length <= 1) {
+         alert("vous devez avoir aumoins un produit");
+         return prevData;
+       }
+
+       const updatedProducts = prevData.products.filter(
+         (_, index) => index !== indexToRemove
+       );
+
+       return {
+         ...prevData,
+         products: updatedProducts,
+       };
+     });
+   };
+  const handleIdentique = () => {
+    formData.deliveryAddress = formData.billingAddress;
+    setShowDelivery(!showDelivery);
+  };
   useEffect(() => {
-  
     const fetchData = async () => {
       try {
         const response = await fetchInvoice(id);
         console.log("les dats", response.data);
         setFormData(response.data);
-       
       } catch (error) {
         console.error("Error fetching invoices:", error);
-        navigate("/notfound")
-        
-      } 
+        navigate("/notfound");
+      }
     };
 
     fetchData();
   }, []);
-
 
   const handleDownloadPDF = () => {
     const options = {
@@ -131,14 +145,11 @@ const InvoiceUpdate = () => {
           name: "",
           unitPriceExclTax: "",
           quantity: "",
-          taxRateOne: "",
-          taxRateTwo: "",
           totalExclTax: "",
         },
       ],
     }));
   };
-
 
   const validateStepOne = () => {
     const newErrors = {};
@@ -152,6 +163,12 @@ const InvoiceUpdate = () => {
 
   const validateStepTwo = () => {
     const newErrors = {};
+    if (!formData.taxRateOne || formData.taxRateOne < 0)
+      newErrors.taxRateOne =
+        "le taux de tax tvq une est requise et superieur a 0.";
+    if (!formData.taxRateTwo || formData.taxRateTwo < 0)
+      newErrors.taxRateTwo =
+        "le taux de tax tps deux est requise et superieur a 0.";
     formData.products.forEach((product, index) => {
       if (!product.reference)
         newErrors[`product-${index}-reference`] = "Référence est requise.";
@@ -162,12 +179,6 @@ const InvoiceUpdate = () => {
       if (!product.quantity || product.quantity < 0)
         newErrors[`product-${index}-quantity`] =
           "Quantité est requise et superieur a 0.";
-      if (!product.taxRateOne || product.taxRateOne < 0)
-        newErrors[`product-${index}-taxRateOne`] =
-          "le taux de tax une est requise et superieur a 0.";
-      if (!product.taxRateTwo || product.taxRateTwo < 0)
-        newErrors[`product-${index}-taxRateTwo`] =
-          "le taux de tax deux est requise et superieur a 0.";
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -249,7 +260,7 @@ const InvoiceUpdate = () => {
     if (validateStepThree()) {
       console.log("Form data submitted:", formData);
       try {
-        const response = await updateInvoice(id,formData);
+        const response = await updateInvoice(id, formData);
         setDataDownload(response?.data);
         setDownload(true);
         toast.success("Facture modifier avec success", {
@@ -263,21 +274,19 @@ const InvoiceUpdate = () => {
         });
         console.log(error);
       }
-
-    
     }
   };
 
-   const steps = [
-     { label: "Commande", icon: <DocumentIcon className="h-5 w-5" /> },
-     {
-       label: "Produit",
-       icon: <ShoppingCartIcon className="h-5 w-5" />,
-     },
-     { label: "Facturation", icon: <CreditCardIcon className="h-5 w-5" /> },
-     { label: "Livraison", icon: <TruckIcon className="h-5 w-5" /> },
-     { label: "Résumé", icon: <CheckCircleIcon className="h-5 w-5" /> },
-   ];
+  const steps = [
+    { label: "Commande", icon: <DocumentIcon className="h-5 w-5" /> },
+    {
+      label: "Produit",
+      icon: <ShoppingCartIcon className="h-5 w-5" />,
+    },
+    { label: "Facturation", icon: <CreditCardIcon className="h-5 w-5" /> },
+    { label: "Livraison", icon: <TruckIcon className="h-5 w-5" /> },
+    { label: "Résumé", icon: <CheckCircleIcon className="h-5 w-5" /> },
+  ];
 
   return (
     <div className="md:bg-white p-2 md:p-8 font-sans mb-10 md:shadow-md rounded-lg md:mx-3 lg:mx-10">
@@ -374,6 +383,55 @@ const InvoiceUpdate = () => {
             {/* Step 2 */}
             {step === 2 && (
               <div className="space-y-6">
+                <div className="grid gird-cols-1 gap-3 items-center">
+                  <h4 className="text-lg flex gap-3 font-semibold text-gray-600">
+                    Taxe
+                  </h4>
+                  <div className="grid grid-cols-1  md:grid-cols-2 gap-3 items-center">
+                    <div className="flex flex-col gap-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        TPS
+                      </label>
+                      <input
+                        type="number"
+                        name="taxRateOne"
+                        value={formData.taxRateOne}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                          errors.taxRateOne
+                            ? " ring-2 ring-red-500 "
+                            : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                        }`}
+                      />
+                      {errors.taxRateOne && (
+                        <p className="text-sm text-red-500">
+                          {errors.taxRateOne}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        TVQ
+                      </label>
+                      <input
+                        type="number"
+                        name="taxRateTwo"
+                        value={formData.taxRateTwo}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                          errors.taxRateTwo
+                            ? " ring-2 ring-red-500 "
+                            : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                        }`}
+                      />
+                      {errors.taxRateTwo && (
+                        <p className="text-sm text-red-500">
+                          {errors.taxRateTwo}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 {formData.products.map((product, index) => (
                   <div
                     key={index}
@@ -476,48 +534,6 @@ const InvoiceUpdate = () => {
                         {errors[`product-${index}-quantity`] && (
                           <p className="text-sm text-red-500">
                             {errors[`product-${index}-quantity`]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          TPS
-                        </label>
-                        <input
-                          type="number"
-                          name="taxRateOne"
-                          value={product.taxRateOne}
-                          onChange={(e) => handleProductChange(index, e)}
-                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                            errors[`product-${index}-taxRateOne`]
-                              ? " ring-2 ring-red-500 "
-                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
-                          }`}
-                        />
-                        {errors[`product-${index}-taxRateOne`] && (
-                          <p className="text-sm text-red-500">
-                            {errors[`product-${index}-taxRateOne`]}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          TVQ
-                        </label>
-                        <input
-                          type="number"
-                          name="taxRateTwo"
-                          value={product.taxRateTwo}
-                          onChange={(e) => handleProductChange(index, e)}
-                          className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                            errors[`product-${index}-taxRateTwo`]
-                              ? " ring-2 ring-red-500 "
-                              : "border-gray-300 focus:ring-2 focus:ring-brightColor "
-                          }`}
-                        />
-                        {errors[`product-${index}-taxRateTwo`] && (
-                          <p className="text-sm text-red-500">
-                            {errors[`product-${index}-taxRateTwo`]}
                           </p>
                         )}
                       </div>
