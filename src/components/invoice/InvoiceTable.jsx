@@ -23,9 +23,10 @@ const InvoiceTable = () => {
       try {
         const response = await fetchInvoices();
         console.log("les datas", response.data);
-        setInvoices(response.data?.reverse());
-        setFilteredInvoices(response.data?.reverse());
-        console.log("voici filtre",filteredInvoices)
+        const reversedInvoices = response.data?.reverse();
+        setInvoices(reversedInvoices);
+        setFilteredInvoices(reversedInvoices);
+        console.log("voici filtre", invoices);
       } catch (error) {
         console.error("Error fetching invoices:", error);
       } finally {
@@ -34,9 +35,8 @@ const InvoiceTable = () => {
     };
 
     fetchData();
-  }, []);
+  }, []); // Dépendance directe à show
 
- 
   const handleDownloadPDF = (invoice) => {
     const element = invoiceRefs.current[invoice._id];
     if (!element) return;
@@ -44,18 +44,17 @@ const InvoiceTable = () => {
     const options = {
       filename: `Invoice_${invoice.invoiceNumber}.pdf`,
       html2canvas: {
-        scale: 2, 
+        scale: 2,
       },
       jsPDF: {
-        unit: "mm", 
-        format: "a4", 
-        orientation: "portrait", 
-   
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
       },
 
-      pagebreak: { mode: "avoid" }, 
+      pagebreak: { mode: "avoid" },
     };
-   
+
     setPdfVisible(true);
 
     html2pdf()
@@ -73,7 +72,6 @@ const InvoiceTable = () => {
       });
   };
 
-
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
@@ -90,10 +88,20 @@ const InvoiceTable = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleBack = () => {
-    setShow(false);
+  const handleBack = async () => {
+    setLoading(true); // Afficher le chargement immédiatement
+    try {
+      const response = await fetchInvoices();
+      const reversedInvoices = response.data?.reverse();
+      setInvoices(reversedInvoices);
+      setFilteredInvoices(reversedInvoices);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données :", error);
+    } finally {
+      setLoading(false); // Désactiver le chargement une fois terminé
+      setShow(false); // Passer à `false` après le chargement
+    }
   };
-
   const indexOfLastInvoice = currentPage * itemsPerPage;
   const indexOfFirstInvoice = indexOfLastInvoice - itemsPerPage;
   const currentInvoices = filteredInvoices?.slice(
@@ -107,148 +115,142 @@ const InvoiceTable = () => {
 
   return (
     <div className="p-4">
-      {show ? (
+      {loading ? ( // Priorité à l'indicateur de chargement
+        <div className="flex justify-center items-center h-64">
+          <Rings color="#3498db" height={80} width={80} />
+        </div>
+      ) : show ? (
         <InvoiceForm emitEvent={handleBack} />
       ) : (
         <>
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Rings color="#3498db" height={80} width={80} />
+          <div className="flex flex-col-reverse md:flex-row gap-3 justify-between items-center mb-4">
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Rechercher..."
+                className="border outline-none focus:ring-2 focus:ring-brightColor rounded px-4 py-2 text-sm w-64"
+              />
+            </div>
+            <button
+              onClick={handleCreateInvoice}
+              className="bg-primaryColor text-white px-4 py-2 rounded hover:bg-opacity-80"
+            >
+              Faire une facture
+            </button>
+          </div>
+
+          {filteredInvoices?.length === 0 || filteredInvoices === undefined ? (
+            <div className="text-center text-lg text-gray-500">
+              Aucune facture disponible
             </div>
           ) : (
             <>
-              <div className="flex flex-col-reverse md:flex-row gap-3 justify-between items-center mb-4">
-                <div className="flex gap-4">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    placeholder="Rechercher..."
-                    className="border outline-none focus:ring-2 focus:ring-brightColor rounded px-4 py-2 text-sm w-64"
-                  />
-                </div>
-                <button
-                  onClick={handleCreateInvoice}
-                  className="bg-primaryColor text-white px-4 py-2 rounded hover:bg-opacity-80"
-                >
-                  Faire une facture
-                </button>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-6 py-4 border border-gray-300">
+                        Numéro de facture #
+                      </th>
+                      <th className="px-6 py-4 border border-gray-300">
+                        Noms du client
+                      </th>
+                      <th className="px-6 py-4 border border-gray-300">
+                        Date de facturation
+                      </th>
+                      <th className="px-6 py-4 border border-gray-300">
+                        Total
+                      </th>
+                      <th className="px-6 py-4 border border-gray-300 text-center">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentInvoices?.map((invoice, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 border border-gray-300">
+                          {invoice.invoiceNumber}
+                        </td>
+                        <td className="px-6 py-4 border border-gray-300">
+                          {invoice.deliveryAddress.name}
+                        </td>
+                        <td className="px-6 py-4 border border-gray-300">
+                          {new Date(invoice.issueDate).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 border border-gray-300">
+                          ${invoice.totalInclTax}
+                        </td>
+                        <td className="px-6 py-4 border border-gray-300 text-center">
+                          <div
+                            ref={(el) =>
+                              (invoiceRefs.current[invoice._id] = el)
+                            }
+                            style={{
+                              display: pdfVisible ? "flex" : "none",
+                            }}
+                          >
+                            <InvoiceRecord data={invoice} />
+                          </div>
+                          <Link to={`/dashboard/view-facture/${invoice._id}`}>
+                            <button className="text-primaryColor hover:text-blue-700 mr-4">
+                              <FaEye />
+                            </button>
+                          </Link>
+
+                          <Link to={`/dashboard/facture/${invoice._id}`}>
+                            <button
+                              className="text-blue-500 hover:text-blue-700 mr-4"
+                              title="Update Invoice"
+                            >
+                              <FaEdit />
+                            </button>
+                          </Link>
+
+                          <button
+                            onClick={() => handleDownloadPDF(invoice)}
+                            className="text-green-500 hover:text-green-700"
+                            title="Download Invoice"
+                          >
+                            <FaDownload />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              {filteredInvoices?.length === 0 || filteredInvoices == undefined ? (
-                <div className="text-center text-lg text-gray-500">
-                  Aucune facture disponible
-                </div>
-              ) : (
-                <>
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-300 text-sm text-left">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="px-6 py-4 border border-gray-300">
-                            Numéro de facture #
-                          </th>
-                          <th className="px-6 py-4 border border-gray-300">
-                            Noms du client
-                          </th>
-                          <th className="px-6 py-4 border border-gray-300">
-                            Date de facturation
-                          </th>
-                          <th className="px-6 py-4 border border-gray-300">
-                            Total
-                          </th>
-                          <th className="px-6 py-4 border border-gray-300 text-center">
-                            Actions
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentInvoices?.map((invoice, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 border border-gray-300">
-                              {invoice.invoiceNumber}
-                            </td>
-                            <td className="px-6 py-4 border border-gray-300">
-                              {invoice.deliveryAddress.name}
-                            </td>
-                            <td className="px-6 py-4 border border-gray-300">
-                              {new Date(invoice.issueDate).toLocaleDateString()}
-                            </td>
-                            <td className="px-6 py-4 border border-gray-300">
-                              ${invoice.totalInclTax}
-                            </td>
-                            <td className=" px-6 py-4 border border-gray-300 text-center">
-                              <div
-                                ref={(el) =>
-                                  (invoiceRefs.current[invoice._id] = el)
-                                }
-                                style={{
-                                  display: pdfVisible ? "flex" : "none",
-                                }}
-                              >
-                                <InvoiceRecord data={invoice} />
-                              </div>
-                              <Link
-                                to={`/dashboard/view-facture/${invoice._id}`}
-                              >
-                                <button className="text-primaryColor hover:text-blue-700 mr-4">
-                                  <FaEye />
-                                </button>
-                              </Link>
-
-                              <Link to={`/dashboard/facture/${invoice._id}`}>
-                                <button
-                                  className="text-blue-500 hover:text-blue-700 mr-4"
-                                  title="Update Invoice"
-                                >
-                                  <FaEdit />
-                                </button>
-                              </Link>
-
-                              <button
-                                onClick={() => handleDownloadPDF(invoice)}
-                                className="text-green-500 hover:text-green-700"
-                                title="Download Invoice"
-                              >
-                                <FaDownload />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="flex justify-center mt-4">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
-                    >
-                      Précédent
-                    </button>
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={
-                        currentPage ===
-                        Math.ceil(filteredInvoices?.length / itemsPerPage)
-                      }
-                      className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
-                    >
-                      Suivant
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {pdfVisible && (
-                <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-90 z-50">
-                  <div className="bg-white p-4 rounded shadow-lg">
-                    <h2 className="text-xl">Downloading PDF...</h2>
-                  </div>
-                </div>
-              )}
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                  Précédent
+                </button>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={
+                    currentPage ===
+                    Math.ceil(filteredInvoices?.length / itemsPerPage)
+                  }
+                  className="px-4 py-2 mx-1 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                  Suivant
+                </button>
+              </div>
             </>
+          )}
+
+          {pdfVisible && (
+            <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-900 bg-opacity-90 z-50">
+              <div className="bg-white p-4 rounded shadow-lg">
+                <h2 className="text-xl">Downloading PDF...</h2>
+              </div>
+            </div>
           )}
         </>
       )}
