@@ -135,7 +135,7 @@ const EditContact = () => {
                         </div>
                     </div>
                     
-                    {values.contactType === 'business' && (
+                    {(values.contactType === 'business' || values.contactType === 'client') && (
                         <div className="form-row">
                             <div className="form-group">
                                 <input type="text" placeholder="Nom de l'entreprise" className="form-control" name='businessName' onChange={handleInput} value={values.businessName} />

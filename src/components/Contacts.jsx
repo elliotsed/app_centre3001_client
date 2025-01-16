@@ -267,7 +267,7 @@ const Contacts = () => {
               <div className="contact-details-column">
                 <p><strong>Skype:</strong> <span>{selectedContact.skype}</span></p>
                 <p><strong>Date de naissance:</strong> <span>{selectedContact.birthday}</span></p>
-                {selectedContact.contactType === "business" ?
+                {(selectedContact.contactType === "business" || selectedContact.contactType === "client") ?
                   <>
                     <p><strong>Nom de l'entreprise:</strong> <span>{selectedContact.businessName}</span></p>
                     <p><strong>Moyen de paiement:</strong> <span>{selectedContact.paymentMethod}</span></p>
