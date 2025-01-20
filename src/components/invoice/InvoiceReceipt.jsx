@@ -212,9 +212,9 @@ const InvoiceRecord = ({ data }) => {
       </div>
 
       {/* Footer */}
-      <div className="mt-8 pt-8 border-t flex flex-col gap-2 text-center text-black text-sm">
-        <p className="">
-          Pour Total (HT)toute assistance, merci de nous contacter :
+      <div className="mt-8 pt-8 border-t flex flex-col gap-2 text-center text-black text-xs">
+        <p className="font-medium">
+          Pour toute assistance, merci de nous contacter :
         </p>
         <p>Tél. : +1 877 545 19 99 , +1 418 246 19 99</p>
         <p>248, Chem des pionniers ouest / Cap-St-Ignace G0R 1H0 (Qc)</p>
