@@ -218,7 +218,9 @@ const InvoiceRecord = ({ data }) => {
         </p>
         <p>Tél. : +1 877 545 19 99 , +1 418 246 19 99</p>
         <p>248, Chem des pionniers ouest / Cap-St-Ignace G0R 1H0 (Qc)</p>
-        <a href="www.aurismagnetic.ca">www.aurismagnetic.ca</a>
+        <a href="www.aurismagnetic.ca" target="_blank">
+          www.aurismagnetic.ca
+        </a>
       </div>
     </div>
   );
