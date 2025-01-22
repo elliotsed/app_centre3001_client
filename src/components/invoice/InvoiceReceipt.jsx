@@ -99,7 +99,7 @@ const InvoiceRecord = ({ data }) => {
               <th className="text-left p-2">Taux de taxe</th>
               <th className="text-right p-2">Prix unitaire (HT)</th>
               <th className="text-right p-2">Quantité</th>
-              <th className="text-right p-2">Total (HT)</th>
+              <th className="text-right p-2">Total </th>
             </tr>
           </thead>
           <tbody>
