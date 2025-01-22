@@ -112,7 +112,9 @@ const InvoiceRecord = ({ data }) => {
                 </td>
                 <td className="text-right p-2">{product.unitPriceExclTax} $</td>
                 <td className="text-right p-2">{product.quantity}</td>
-                <td className="text-right p-2">{product.totalExclTax} $</td>
+                <td className="text-right p-2">
+                  {Number(product.totalExclTax).toFixed(2)} $
+                </td>
               </tr>
             ))}
           </tbody>
