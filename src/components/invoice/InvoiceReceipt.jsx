@@ -158,7 +158,7 @@ const InvoiceRecord = ({ data }) => {
                     Moyen de paiement
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
-                    {paymentMethod} - {totalInclTax} $
+                    {paymentMethod} - {Number(totalInclTax).toFixed(2)} $
                   </td>
                 </tr>
                 <tr>
@@ -194,17 +194,21 @@ const InvoiceRecord = ({ data }) => {
                 <th className=" px-4 py-3 bg-gray-100 text-gray-700">
                   Total (HT)
                 </th>
-                <td className=" px-4 py-2">{totalsExclTax} $</td>
+                <td className=" px-4 py-2">
+                  {Number(totalsExclTax).toFixed(2)} $
+                </td>
               </tr>
               <tr>
                 <th className=" px-4 py-3 bg-gray-100 text-gray-700">
                   Taxe totale
                 </th>
-                <td className=" px-4 py-2">{totalTax} $</td>
+                <td className=" px-4 py-2">{Number(totalTax).toFixed(2)} $</td>
               </tr>
               <tr>
                 <th className=" px-4 py-2 bg-gray-100 text-gray-700">Total</th>
-                <td className=" px-4 py-2">{totalInclTax} $</td>
+                <td className=" px-4 py-2">
+                  {Number(totalInclTax).toFixed(2)}$
+                </td>
               </tr>
             </tbody>
           </table>
