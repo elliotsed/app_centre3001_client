@@ -38,6 +38,7 @@ const InvoiceForm = ({ emitEvent }) => {
     shippingFees: 0,
     taxRateOne: 0,
     taxRateTwo: 0,
+    discount: 0,
     taxRate: 0,
     paymentMethod: "",
     totalProductsExclTax: 0,
@@ -197,9 +198,11 @@ const InvoiceForm = ({ emitEvent }) => {
 
     if (!formData.carrierName)
       newErrors.carrierName = "Nom du transporteur est requis.";
+    if (formData.discount && formData.discount < 0)
+      newErrors.discount = "la remise est superieur a zero.";
 
-    if (!formData.shippingFees && formData.shippingFees !== 0)
-      newErrors.shippingFees = "Frais d'expédition sont requis.";
+    if (formData.shippingFees && formData.shippingFees < 0)
+      newErrors.shippingFees = "Frais d'expédition est superieur a zero.";
 
     if (!formData.paymentMethod)
       newErrors.paymentMethod = "Méthode de paiement est requise.";
@@ -243,8 +246,8 @@ const InvoiceForm = ({ emitEvent }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateStepThree()) {
-      console.log("Form data submitted:", formData);
+    if (validateStepFour()) {
+      // console.log("Form data submitted:", formData);
 
       try {
         const response = await createInvoice(formData);
@@ -922,25 +925,24 @@ const InvoiceForm = ({ emitEvent }) => {
 
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Transporteur
+                      Remise
                     </label>
                     <input
-                      type="text"
-                      name="carrierName"
-                      value={formData.carrierName}
+                      type="number"
+                      name="discount"
+                      value={formData.discount}
                       onChange={handleChange}
                       className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                        errors.carrierName
+                        errors.discount
                           ? " ring-2 ring-red-500 "
                           : "border-gray-300 focus:ring-2 focus:ring-brightColor "
                       }`}
                     />
-                    {errors.carrierName && (
-                      <p className="text-sm text-red-500">
-                        {errors.carrierName}
-                      </p>
+                    {errors.discount && (
+                      <p className="text-sm text-red-500">{errors.discount}</p>
                     )}
                   </div>
+
                   <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">
                       Frais de livraison
@@ -959,6 +961,27 @@ const InvoiceForm = ({ emitEvent }) => {
                     {errors.shippingFees && (
                       <p className="text-sm text-red-500">
                         {errors.shippingFees}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Transporteur
+                    </label>
+                    <input
+                      type="text"
+                      name="carrierName"
+                      value={formData.carrierName}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-2 border rounded-lg outline-none ${
+                        errors.carrierName
+                          ? " ring-2 ring-red-500 "
+                          : "border-gray-300 focus:ring-2 focus:ring-brightColor "
+                      }`}
+                    />
+                    {errors.carrierName && (
+                      <p className="text-sm text-red-500">
+                        {errors.carrierName}
                       </p>
                     )}
                   </div>
