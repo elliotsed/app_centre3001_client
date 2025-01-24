@@ -141,8 +141,18 @@ const SummaryTable = ({ formData }) => {
                   </th>
                   <td className="border border-gray-300 px-4 py-2">
                     {formData.shippingFees
-                      ? formData.shippingFees
+                      ? formData.shippingFees + " $"
                       : "Pas de frais"}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                    Remise
+                  </th>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {formData.discount
+                      ? formData.discount + " $"
+                      : "Pas de remise"}
                   </td>
                 </tr>
                 <tr>
@@ -208,10 +218,10 @@ const SummaryTable = ({ formData }) => {
                   {product.quantity}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {product.unitPriceExclTax}
+                  {product.unitPriceExclTax} $
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {formData.taxRateOne}, {formData.taxRateTwo}
+                  {formData.taxRateOne} %, {formData.taxRateTwo} %
                 </td>
               </tr>
             ))}

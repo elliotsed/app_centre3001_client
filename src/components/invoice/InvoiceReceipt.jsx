@@ -14,6 +14,7 @@ const InvoiceRecord = ({ data }) => {
     shippingFees,
     taxRateOne,
     taxRateTwo,
+    discount,
     totalsExclTax,
     paymentMethod,
     totalProductsExclTax,
@@ -123,7 +124,7 @@ const InvoiceRecord = ({ data }) => {
 
       {/* Summary */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-2">
           <div className="flex flex-col gap-2">
             <table className="w-full border-collapse border border-gray-300 text-sm text-start">
               <thead>
@@ -150,29 +151,28 @@ const InvoiceRecord = ({ data }) => {
                 </tr>
               </tbody>
             </table>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <table className="w-full border-collapse border border-gray-300 text-sm text-left">
-              <tbody>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Moyen de paiement
-                  </th>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {paymentMethod} - {Number(totalInclTax).toFixed(2)} $
-                  </td>
-                </tr>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
-                    Transporteur
-                  </th>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {carrierName}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="flex flex-col gap-2">
+              <table className="w-full border-collapse border border-gray-300 text-sm text-left">
+                <tbody>
+                  <tr>
+                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                      Moyen de paiement
+                    </th>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {paymentMethod} - {Number(totalInclTax).toFixed(2)} $
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 text-gray-700">
+                      Transporteur
+                    </th>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {carrierName}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -190,6 +190,14 @@ const InvoiceRecord = ({ data }) => {
                 </th>
                 <td className=" px-4 py-2">
                   {shippingFees === 0 ? "gratuit" : `${shippingFees} $`}
+                </td>
+              </tr>
+              <tr className="">
+                <th className=" font-normal px-4 py-3 bg-gray-100 text-gray-700">
+                  Remise
+                </th>
+                <td className=" px-4 py-2">
+                  {discount === 0 ? "pas de remise" : `${discount} $`}
                 </td>
               </tr>
               <tr className="">
