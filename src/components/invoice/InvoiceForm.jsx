@@ -247,12 +247,16 @@ const InvoiceForm = ({ emitEvent }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateStepFour()) {
-      // console.log("Form data submitted:", formData);
+      console.log("Form data submitted:", formData);
 
       try {
         const response = await createInvoice(formData);
         setDataDownload(response?.data);
-        setDownload(true);
+        if (dataDownload) {
+          setDownload(true);
+        }
+
+        console.log("la repose", response);
         toast.success("Facture creer est telecharge", {
           position: "top-right",
           autoClose: 5000,
@@ -262,7 +266,7 @@ const InvoiceForm = ({ emitEvent }) => {
           position: "top-right",
           autoClose: 5000,
         });
-        console.log(error);
+        console.log("erreur", error);
       }
     }
   };
