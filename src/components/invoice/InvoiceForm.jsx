@@ -20,7 +20,7 @@ const InvoiceForm = ({ emitEvent }) => {
   const [errors, setErrors] = useState({});
   const [showDelivery, setShowDelivery] = useState(false);
   const [download, setDownload] = useState(false);
-  const [dataDownload, setDataDownload] = useState(false);
+  const [dataDownload, setDataDownload] = useState([]);
 
   const [formData, setFormData] = useState({
     orderRef: "",
@@ -252,15 +252,17 @@ const InvoiceForm = ({ emitEvent }) => {
       try {
         const response = await createInvoice(formData);
         setDataDownload(response?.data);
+        console.log("la reposne", response?.data);
+        console.log("la data", dataDownload);
         if (dataDownload) {
           setDownload(true);
+          toast.success("Facture creer est telecharge", {
+            position: "top-right",
+            autoClose: 5000,
+          });
         }
 
         console.log("la repose", response);
-        toast.success("Facture creer est telecharge", {
-          position: "top-right",
-          autoClose: 5000,
-        });
       } catch (error) {
         toast.error("une erreur", {
           position: "top-right",
