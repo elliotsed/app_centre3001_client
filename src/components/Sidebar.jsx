@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 // import { FaUser } from 'react-icons/fa6'
 import { FaFileInvoice } from "react-icons/fa";
 import { RiContactsBook3Fill } from 'react-icons/ri'
 import { IoPersonAddSharp } from 'react-icons/io5'
+import { FaUser } from 'react-icons/fa'; 
 import { RiLogoutCircleLine } from 'react-icons/ri'
 import { IoHome } from "react-icons/io5"
 import "../assets/css/sidebar.css"
@@ -57,6 +58,15 @@ const Sidebar = () => {
             <span className="title">Ajouter Contact</span>
           </Link>
         </li>
+
+        <li className={`${activeLink === 3 ? 'activeLink' : ''}`} onClick={() => setActiveLink(3)}>
+        <Link to="/dashboard/clients" className="sidebar-link">
+          <span className="icon">
+            <FaUser />
+          </span>
+          <span className="title">Mes Clients</span>
+        </Link>
+      </li>
 
         {/* <li className={`${activeLink === 3 ? "activeLink" : ""}`} onClick={() => setActiveLink(3)}>
                 <Link to="#" className='sidebar-link'>

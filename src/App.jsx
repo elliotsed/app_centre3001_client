@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -17,6 +17,9 @@ import NotFound from './pages/NotFound'
 import InvoicePage from './pages/Invoice/Invoice'
 import InvoiceUpdatePage from './pages/Invoice/InvoiceUpdatePage'
 import InvoiceViewOne from './pages/Invoice/InvoiceViewOne'
+import ClientProfile from './components/consultations/ClientProfile'
+import Clients from './pages/Clients'
+import ConsultationDetails from './pages/Consultations'
 
 export const UserContext = createContext(null);
 
@@ -72,6 +75,18 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/facture/:id",
         element: <InvoiceUpdatePage />,
+      },
+      {
+        path: "/dashboard/clients/:id",
+        element: <ClientProfile />,
+      },
+      {
+        path: "/dashboard/clients",
+        element: <Clients />,
+      },
+      {
+        path: "/dashboard/consultations/:id",
+        element: <ConsultationDetails />,
       },
     ],
   },
