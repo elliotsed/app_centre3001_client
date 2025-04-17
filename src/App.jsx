@@ -20,6 +20,7 @@ import InvoiceViewOne from './pages/Invoice/InvoiceViewOne'
 import ClientProfile from './components/consultations/ClientProfile'
 import Clients from './pages/Clients'
 import ConsultationDetails from './pages/Consultations'
+import AddClient from './components/consultations/AddClient'
 
 export const UserContext = createContext(null);
 
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/consultations/:id",
         element: <ConsultationDetails />,
+      },
+      {
+        path: "/dashboard/add-client",
+        element: <AddClient />,
       },
     ],
   },
