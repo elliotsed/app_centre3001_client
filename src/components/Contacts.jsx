@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import { useState,useContext,useEffect } from 'react';
 import "../assets/css/contacts.css"
 import axios from 'axios'
 import DataTable from 'react-data-table-component'
@@ -73,7 +73,7 @@ const Contacts = () => {
               icon: "success"
             });
 
-          }).catch(err => {
+          }).catch(() => {
             MySwal.fire({
               title: "Erreur!",
               text: "Une erreur est survenue!",
@@ -269,7 +269,7 @@ const Contacts = () => {
                 <p><strong>Date de naissance:</strong> <span>{selectedContact.birthday}</span></p>
                 {(selectedContact.contactType === "business" || selectedContact.contactType === "client") ?
                   <>
-                    <p><strong>Nom de l'entreprise:</strong> <span>{selectedContact.businessName}</span></p>
+                    <p><strong>{"Nom de l'entreprise:"}</strong> <span>{selectedContact.businessName}</span></p>
                     <p><strong>Moyen de paiement:</strong> <span>{selectedContact.paymentMethod}</span></p>
                   </>
                   : <></>

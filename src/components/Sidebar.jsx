@@ -60,6 +60,16 @@ const Sidebar = () => {
         </li>
 
         <li className={`${activeLink === 3 ? 'activeLink' : ''}`} onClick={() => setActiveLink(3)}>
+        <Link to="/dashboard/add-client" className="sidebar-link">
+          <span className="icon">
+            <FaUser />
+          </span>
+          <span className="title">Ajouter un Client</span>
+        </Link>
+      </li>
+
+
+      <li className={`${activeLink === 4 ? 'activeLink' : ''}`} onClick={() => setActiveLink(4)}>
         <Link to="/dashboard/clients" className="sidebar-link">
           <span className="icon">
             <FaUser />
@@ -78,8 +88,8 @@ const Sidebar = () => {
             </li> */}
 
         <li
-          className={`${activeLink === 3 ? "activeLink" : ""}`}
-          onClick={() => setActiveLink(3)}
+          className={`${activeLink === 5 ? "activeLink" : ""}`}
+          onClick={() => setActiveLink(5)}
         >
           <Link
             to="/dashboard/facture"
@@ -93,8 +103,8 @@ const Sidebar = () => {
         </li>
 
         <li
-          className={`${activeLink === 4 ? "activeLink" : ""}`}
-          onClick={() => setActiveLink(4)}
+          className={`${activeLink === 6 ? "activeLink" : ""}`}
+          onClick={() => setActiveLink(6)}
         >
           <Link to="/logout" className="sidebar-link">
             <span className="icon">

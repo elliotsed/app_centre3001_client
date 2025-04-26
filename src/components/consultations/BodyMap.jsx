@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import photo from '../../assets/photo.png';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
 const BodyMap = ({ painAreas, scars, onUpdate }) => {
   const [selectedPart, setSelectedPart] = useState('');
   const [painDetails, setPainDetails] = useState({ direction: '', intensity: 0, maxIntensity: 0 });
-  const [scarDescription, setScarDescription] = useState('');
 
   const bodyParts = [
     'Tête', 'Cou', 'Épaule gauche', 'Épaule droite', 'Bras gauche', 'Bras droit',
@@ -20,23 +21,14 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
     }
   };
 
-  const addScar = () => {
-    if (selectedPart && scarDescription) {
-      const newScars = [...scars, { bodyPart: selectedPart, description: scarDescription }];
-      onUpdate(painAreas, newScars);
-      setScarDescription('');
-      setSelectedPart('');
-    }
-  };
 
   return (
     <div className="mt-6">
       <h3 className="text-lg font-semibold mb-4">Visualisation corporelle</h3>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/2">
-          <p>Représentation du squelette (simulée)</p>
-          <div className="h-64 bg-gray-100 rounded flex items-center justify-center">
-            <p>Image du squelette (à intégrer)</p>
+          <div className="h-64 mt-4 bg-gray-100 rounded flex items-center justify-center">
+           <img src={photo} alt=""/>
           </div>
         </div>
         <div className="w-full md:w-1/2 space-y-4">
@@ -56,7 +48,7 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
           <div>
             <h4 className="text-sm font-medium">Ajouter une douleur</h4>
             <div className="space-y-2">
-              <div>
+              {/* <div>
                 <label className="block text-sm">Direction de la douleur</label>
                 <input
                   type="text"
@@ -64,7 +56,7 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
                   onChange={(e) => setPainDetails({ ...painDetails, direction: e.target.value })}
                   className="w-full p-2 border rounded"
                 />
-              </div>
+              </div> */}
               <div>
                 <label className="block text-sm">Intensité actuelle (%)</label>
                 <input
@@ -96,7 +88,7 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
               </button>
             </div>
           </div>
-          <div>
+          {/* <div>
             <h4 className="text-sm font-medium">Ajouter une cicatrice</h4>
             <div className="space-y-2">
               <div>
@@ -116,23 +108,27 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
                 Ajouter cicatrice
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="mt-4">
-        <h4 className="text-sm font-medium">Douleurs enregistrées</h4>
+        <h4 className="text-md font-medium">Douleurs enregistrées</h4>
         {painAreas.length > 0 ? (
-          <ul className="list-disc pl-5">
+         <ul className="list-none mt-3 pl-0">
             {painAreas.map((pain, index) => (
-              <li key={index}>
-                {pain.bodyPart}: {pain.direction}, Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
+              <li key={index} className="flex items-center gap-2 mb-2">
+                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                
+                <span>
+                  {pain.bodyPart}: {pain.direction}, Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
+                </span>
               </li>
             ))}
           </ul>
         ) : (
           <p>Aucune douleur enregistrée.</p>
         )}
-        <h4 className="text-sm font-medium mt-2">Cicatrices enregistrées</h4>
+        {/* <h4 className="text-sm font-medium mt-2">Cicatrices enregistrées</h4>
         {scars.length > 0 ? (
           <ul className="list-disc pl-5">
             {scars.map((scar, index) => (
@@ -141,7 +137,7 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
           </ul>
         ) : (
           <p>Aucune cicatrice enregistrée.</p>
-        )}
+        )} */}
       </div>
     </div>
   );

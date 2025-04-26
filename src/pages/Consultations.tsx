@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchConsultation } from '../api/clients';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 const ConsultationDetails = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const ConsultationDetails = () => {
     clientComment?: string;
     improvementPercentage: number;
   }
-  
+
   const [consultation, setConsultation] = useState<Consultation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,50 +45,138 @@ const ConsultationDetails = () => {
     loadConsultation();
   }, [id]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (error) return <p>{error}</p>;
-  if (!consultation) return <p>Consultation non trouvée</p>;
+  if (loading) return <p className="text-center text-gray-600">Chargement...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (!consultation) return <p className="text-center text-gray-600">Consultation non trouvée</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Détails de la Consultation</h2>
-      <p><strong>Date :</strong> {new Date(consultation.date).toLocaleDateString()}</p>
-      <p><strong>Motif :</strong> {consultation.consultationReason}</p>
-      <p><strong>Allergies :</strong> {consultation.allergies || 'Aucune'}</p>
-      <p><strong>Membre artificiel :</strong> {consultation.artificialLimb ? 'Oui' : 'Non'}</p>
-      <p><strong>Pacemaker :</strong> {consultation.pacemaker ? 'Oui' : 'Non'}</p>
-      <p><strong>Pression artérielle :</strong> {consultation.bloodPressure || 'N/A'}</p>
-      <p><strong>Covid/Virus :</strong> {consultation.covidOrVirus || 'Aucun'}</p>
-      <h3 className="text-lg font-semibold mt-4">Douleurs</h3>
-      {consultation.painAreas && consultation.painAreas.length > 0 ? (
-        <ul className="list-disc pl-5">
-          {consultation.painAreas.map((pain, index) => (
-            <li key={index}>
-              {pain.bodyPart}: {pain.direction}, Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Aucune douleur enregistrée.</p>
-      )}
-      <h3 className="text-lg font-semibold mt-4">Cicatrices</h3>
-      {consultation.scars && consultation.scars.length > 0 ? (
-        <ul className="list-disc pl-5">
-          {consultation.scars.map((scar, index) => (
-            <li key={index}>{scar.bodyPart}: {scar.description}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>Aucune cicatrice enregistrée.</p>
-      )}
-      <p><strong>Observations du praticien :</strong> {consultation.practitionerObservations || 'N/A'}</p>
-      <p><strong>Durée du problème :</strong> {consultation.problemDuration || 'N/A'}</p>
-      <p><strong>Indication médicale :</strong> {consultation.medicalIndication || 'N/A'}</p>
-      <p><strong>Médication :</strong> {consultation.medication || 'Aucune'}</p>
-      <p><strong>Maladie :</strong> {consultation.disease || 'Aucune'}</p>
-      <p><strong>Détails du traitement :</strong> {consultation.treatmentDetails || 'N/A'}</p>
-      <p><strong>Commentaire du client :</strong> {consultation.clientComment || 'N/A'}</p>
-      <p><strong>Pourcentage d’amélioration :</strong> {consultation.improvementPercentage}%</p>
+    <div className="max-w-4xl mt-10 mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-gray-700 mb-6">Détails de la Consultation</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Colonne gauche : Date, Antécédents et Douleurs/Cicatrices */}
+        <div className="space-y-4">
+          <div className="divide-y divide-gray-200">
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Date :</strong> {new Date(consultation.date).toLocaleDateString()}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Allergies :</strong> {consultation.allergies || 'Aucune'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Membre artificiel :</strong> {consultation.artificialLimb ? 'Oui' : 'Non'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Pacemaker :</strong> {consultation.pacemaker ? 'Oui' : 'Non'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Pression artérielle :</strong> {consultation.bloodPressure || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Covid/Virus :</strong> {consultation.covidOrVirus || 'Aucun'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <h4 className="text-sm font-medium">Douleurs enregistrées</h4>
+              {consultation.painAreas && consultation.painAreas.length > 0 ? (
+                <ul className="list-none pl-0 mt-2">
+                  {consultation.painAreas.map((pain, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-b-0"
+                    >
+                      <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                      <span>
+                        {pain.bodyPart}: {pain.direction}, Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-gray-600">Aucune douleur enregistrée.</p>
+              )}
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <h4 className="text-sm font-medium">Cicatrices enregistrées</h4>
+              {consultation.scars && consultation.scars.length > 0 ? (
+                <ul className="list-none pl-0 mt-2">
+                  {consultation.scars.map((scar, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-b-0"
+                    >
+                      <ExclamationCircleIcon className="h-5 w-5 text-blue-500" />
+                      <span>{scar.bodyPart}: {scar.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-gray-600">Aucune cicatrice enregistrée.</p>
+              )}
+            </div>
+          </div>
+        </div>
+        {/* Colonne droite : Détails de la consultation */}
+        <div className="space-y-4">
+          <div className="divide-y divide-gray-200">
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Motif :</strong> {consultation.consultationReason || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Observations :</strong> {consultation.practitionerObservations || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Durée du problème :</strong> {consultation.problemDuration || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Indication médicale :</strong> {consultation.medicalIndication || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Médication :</strong> {consultation.medication || 'Aucune'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Maladie :</strong> {consultation.disease || 'Aucune'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Traitement :</strong> {consultation.treatmentDetails || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-gray-100">
+              <p>
+                <strong>Commentaire client :</strong> {consultation.clientComment || 'N/A'}
+              </p>
+            </div>
+            <div className="py-3 px-2 rounded-md bg-white">
+              <p>
+                <strong>Pourcentage d’amélioration :</strong> {consultation.improvementPercentage}%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
