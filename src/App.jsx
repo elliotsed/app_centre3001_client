@@ -21,6 +21,7 @@ import ClientProfile from './components/consultations/ClientProfile'
 import Clients from './pages/Clients'
 import ConsultationDetails from './pages/Consultations'
 import AddClient from './components/consultations/AddClient'
+import NewConsultation from './pages/NewConsultation'
 
 export const UserContext = createContext(null);
 
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/add-client",
         element: <AddClient />,
+      },
+      {
+        path: "/dashboard/clients/:id/consultations/new",
+        element: <NewConsultation />,
       },
     ],
   },

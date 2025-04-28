@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchConsultation } from '../api/clients';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import CircleLoader from 'react-spinners/CircleLoader';
 
 const ConsultationDetails = () => {
   const { id } = useParams();
@@ -45,9 +46,46 @@ const ConsultationDetails = () => {
     loadConsultation();
   }, [id]);
 
-  if (loading) return <p className="text-center text-gray-600">Chargement...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
-  if (!consultation) return <p className="text-center text-gray-600">Consultation non trouvée</p>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <CircleLoader
+          loading={loading}
+          size={50}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <CircleLoader
+          loading={false}
+          size={50}
+          aria-label="Error Spinner"
+          data-testid="error-loader"
+        />
+        <p className="mt-4 text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  if (!consultation) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <CircleLoader
+          loading={false}
+          size={50}
+          aria-label="Not Found Spinner"
+          data-testid="not-found-loader"
+        />
+        <p className="mt-4 text-gray-600">Consultation non trouvée</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mt-10 mx-auto p-6 bg-white rounded-lg shadow-md">
