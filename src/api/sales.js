@@ -22,3 +22,28 @@ export const createSale = async (saleData) => {
     return error;
   }
 };
+
+export const deleteSale = async (saleId) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('deleteSale: Aucun token trouvé dans localStorage');
+      throw new Error('Non autorisé: veuillez vous connecter');
+    }
+    const response = await axios.delete(`${API_BASE_URL}/${saleId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting sale:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    throw error.response?.status === 401
+      ? new Error('Non autorisé: veuillez vous reconnecter')
+      : error;
+  }
+};
