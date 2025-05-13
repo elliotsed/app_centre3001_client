@@ -8,7 +8,8 @@ import {
   UserIcon,
   MapIcon,
   CheckCircleIcon,
-ExclamationCircleIcon } from '@heroicons/react/outline';
+  ExclamationCircleIcon,
+} from '@heroicons/react/outline';
 
 const ConsultationForm = ({ clientId, onConsultationAdded }) => {
   const [step, setStep] = useState(1);
@@ -19,6 +20,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
     pacemaker: false,
     bloodPressure: '',
     covidOrVirus: '',
+    other: '',
     painAreas: [],
     scars: [],
     consultationReason: '',
@@ -32,30 +34,22 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
     improvementPercentage: 0,
   });
 
-  // Validation functions for each step
+  // Validation functions for each step (champs facultatifs sauf consultationReason)
   const validateStepOne = () => {
     const newErrors = {};
-    if (!formData.allergies) newErrors.allergies = 'Les allergies sont requises (ou "Aucune").';
-    if (!formData.bloodPressure) newErrors.bloodPressure = 'La pression artérielle est requise (ou "Normale").';
-    if (!formData.covidOrVirus) newErrors.covidOrVirus = 'Le statut Covid/Virus est requis (ou "Aucun").';
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return true; // Tous les champs sont facultatifs
   };
 
   const validateStepTwo = () => {
     const newErrors = {};
-    if (formData.painAreas.length === 0 && formData.scars.length === 0) {
-      newErrors.painAreas = 'Ajoutez au moins une douleur ou une cicatrice.';
-    }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return true; // Douleurs/cicatrices facultatives
   };
 
   const validateStepThree = () => {
     const newErrors = {};
     if (!formData.consultationReason) newErrors.consultationReason = 'Le motif de la consultation est requis.';
-    if (!formData.practitionerObservations) newErrors.practitionerObservations = 'Les observations sont requises (ou "Aucune").';
-    if (!formData.problemDuration) newErrors.problemDuration = 'La durée du problème est requise.';
     if (formData.improvementPercentage < 0 || formData.improvementPercentage > 100) {
       newErrors.improvementPercentage = 'Le pourcentage doit être entre 0 et 100.';
     }
@@ -64,7 +58,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
   };
 
   const validateStepFour = () => {
-    return validateStepOne() && validateStepTwo() && validateStepThree();
+    return validateStepThree(); // Seule la validation de l'étape 3 est nécessaire
   };
 
   const handleNext = () => {
@@ -92,6 +86,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
           pacemaker: false,
           bloodPressure: '',
           covidOrVirus: '',
+          other: '',
           painAreas: [],
           scars: [],
           consultationReason: '',
@@ -186,15 +181,8 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                     name="allergies"
                     value={formData.allergies}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                      errors.allergies
-                        ? 'ring-2 ring-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-brightColor'
-                    }`}
+                    className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
                   />
-                  {errors.allergies && (
-                    <p className="text-sm text-red-500">{errors.allergies}</p>
-                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="block text-sm font-medium text-gray-700">
@@ -205,15 +193,8 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                     name="bloodPressure"
                     value={formData.bloodPressure}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                      errors.bloodPressure
-                        ? 'ring-2 ring-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-brightColor'
-                    }`}
+                    className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
                   />
-                  {errors.bloodPressure && (
-                    <p className="text-sm text-red-500">{errors.bloodPressure}</p>
-                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="block text-sm font-medium text-gray-700">
@@ -224,15 +205,20 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                     name="covidOrVirus"
                     value={formData.covidOrVirus}
                     onChange={handleChange}
-                    className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                      errors.covidOrVirus
-                        ? 'ring-2 ring-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-brightColor'
-                    }`}
+                    className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
                   />
-                  {errors.covidOrVirus && (
-                    <p className="text-sm text-red-500">{errors.covidOrVirus}</p>
-                  )}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Autre
+                  </label>
+                  <input
+                    type="text"
+                    name="other"
+                    value={formData.other}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
+                  />
                 </div>
               </div>
               {/* Right: Checkboxes */}
@@ -266,7 +252,6 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
           </div>
         )}
 
-
         {/* Step 2: Douleurs et Cicatrices */}
         {step === 2 && (
           <div className="space-y-6">
@@ -284,9 +269,6 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                 })
               }
             />
-            {errors.painAreas && (
-              <p className="text-sm text-red-500">{errors.painAreas}</p>
-            )}
           </div>
         )}
 
@@ -323,15 +305,8 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                   name="practitionerObservations"
                   value={formData.practitionerObservations}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                    errors.practitionerObservations
-                      ? 'ring-2 ring-red-500'
-                      : 'border-gray-300 focus:ring-2 focus:ring-brightColor'
-                  }`}
+                  className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
                 />
-                {errors.practitionerObservations && (
-                  <p className="text-sm text-red-500">{errors.practitionerObservations}</p>
-                )}
               </div>
               <div className="flex flex-col gap-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -342,15 +317,8 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                   name="problemDuration"
                   value={formData.problemDuration}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg outline-none ${
-                    errors.problemDuration
-                      ? 'ring-2 ring-red-500'
-                      : 'border-gray-300 focus:ring-2 focus:ring-brightColor'
-                  }`}
+                  className="w-full px-4 py-2 border rounded-lg outline-none border-gray-300 focus:ring-2 focus:ring-brightColor"
                 />
-                {errors.problemDuration && (
-                  <p className="text-sm text-red-500">{errors.problemDuration}</p>
-                )}
               </div>
               <div className="flex flex-col gap-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -435,8 +403,8 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
           </div>
         )}
 
-       {/* Step 4: Résumé */}
-       {step === 4 && (
+        {/* Step 4: Résumé */}
+        {step === 4 && (
           <div className="space-y-6">
             <h3 className="font-sans font-semibold text-gray-700">
               Résumé de la Consultation
@@ -450,7 +418,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                       <strong>Allergies :</strong> {formData.allergies || 'Aucune'}
                     </p>
                   </div>
-                  <div className="py-3 px-2 rounded-md   bg-gray-100">
+                  <div className="py-3 px-2 rounded-md bg-gray-100">
                     <p>
                       <strong>Membre artificiel :</strong> {formData.artificialLimb ? 'Oui' : 'Non'}
                     </p>
@@ -471,6 +439,11 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                     </p>
                   </div>
                   <div className="py-3 px-2 rounded-md bg-gray-100">
+                    <p>
+                      <strong>Autre :</strong> {formData.other || 'Aucun'}
+                    </p>
+                  </div>
+                  <div className="py-3 px-2 rounded-md bg-white">
                     <h4 className="text-sm font-medium">Douleurs enregistrées</h4>
                     {formData.painAreas.length > 0 ? (
                       <ul className="list-none pl-0 mt-2">
@@ -481,7 +454,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                           >
                             <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
                             <span>
-                              {pain.bodyPart}: {pain.direction}, Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
+                              {pain.bodyPart} {pain.side ? `(${pain.side})` : ''}: Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
                             </span>
                           </li>
                         ))}
@@ -490,7 +463,7 @@ const ConsultationForm = ({ clientId, onConsultationAdded }) => {
                       <p className="mt-2 text-gray-600">Aucune douleur enregistrée.</p>
                     )}
                   </div>
-                  <div className="py-3 px-2 rounded-md bg-white">
+                  <div className="py-3 px-2 rounded-md bg-gray-100">
                     <h4 className="text-sm font-medium">Cicatrices enregistrées</h4>
                     {formData.scars.length > 0 ? (
                       <ul className="list-none pl-0 mt-2">

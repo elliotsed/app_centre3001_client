@@ -1,5 +1,4 @@
-import { useState,  useContext  } from 'react';
-
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -8,10 +7,12 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 
 const AddClient = () => {
   const [values, setValues] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     address: '',
-    email: '',
-    phone: ''
+    municipality: '',
+    postalCode: '',
+    phone: '',
   });
   const navigate = useNavigate();
   const { handleToggleClick } = useContext(DashboardContext);
@@ -20,7 +21,7 @@ const AddClient = () => {
     const { name, value } = event.target;
     setValues((prevValues) => ({
       ...prevValues,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -32,14 +33,14 @@ const AddClient = () => {
     axios
       .post('https://app-centre3001-api.vercel.app/gestion_contact/add-client', values, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       })
       .then((res) => {
         console.log('API response:', res.data);
         toast.success('Client ajouté', {
           position: 'top-right',
-          autoClose: 5000
+          autoClose: 5000,
         });
         navigate('/dashboard/clients');
       })
@@ -48,12 +49,12 @@ const AddClient = () => {
           message: err.message,
           response: err.response ? {
             status: err.response.status,
-            data: err.response.data
-          } : 'No response'
+            data: err.response.data,
+          } : 'No response',
         });
         toast.error('Erreur lors de l\'ajout du client', {
           position: 'top-right',
-          autoClose: 5000
+          autoClose: 5000,
         });
       });
   };
@@ -74,25 +75,38 @@ const AddClient = () => {
                 type="text"
                 placeholder="Nom"
                 className="form-control"
-                name="name"
+                name="lastName"
                 required
-                value={values.name}
+                value={values.lastName}
                 onChange={handleInput}
               />
             </div>
             <div className="form-group">
               <input
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Prénom"
                 className="form-control"
-                name="email"
+                name="firstName"
                 required
-                value={values.email}
+                value={values.firstName}
                 onChange={handleInput}
               />
             </div>
           </div>
           <div className="form-row">
+            <div className="form-group">
+             
+ <input
+                type="tel"
+                placeholder="Téléphone"
+                className="form-control"
+                name="phone"
+                required
+                value={values.phone}
+                onChange={handleInput}
+              />
+
+            </div>
             <div className="form-group">
               <input
                 type="text"
@@ -104,17 +118,32 @@ const AddClient = () => {
                 onChange={handleInput}
               />
             </div>
+          </div>
+          <div className="form-row">
             <div className="form-group">
               <input
-                type="tel"
-                placeholder="Téléphone"
+                type="text"
+                placeholder="Municipalité"
                 className="form-control"
-                name="phone"
-                value={values.phone}
+                name="municipality"
+                required
+                value={values.municipality}
+                onChange={handleInput}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Code postal"
+                className="form-control"
+                name="postalCode"
+                required
+                value={values.postalCode}
                 onChange={handleInput}
               />
             </div>
           </div>
+        
           <button className="form-btn">Ajouter</button>
         </form>
       </div>

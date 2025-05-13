@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CircleLoader from 'react-spinners/CircleLoader';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaPlus, FaDownload } from 'react-icons/fa';
 import { fetchSales, deleteSale } from '../api/sales';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import html2pdf from 'html2pdf.js';
+import '../assets/css/Sales.css';
+
 
 const MySwal = withReactContent(Swal);
 
@@ -15,6 +18,7 @@ const Sales = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('all');
+  const tableRef = useRef(null);
 
   const loadSales = async () => {
     try {
@@ -32,7 +36,6 @@ const Sales = () => {
     loadSales();
   }, []);
 
-  // Filtrer par recherche et année
   useEffect(() => {
     let filtered = sales;
     if (searchTerm) {
@@ -65,7 +68,7 @@ const Sales = () => {
       if (result.isConfirmed) {
         try {
           await deleteSale(saleId);
-          await loadSales(); // Recharger les ventes après suppression
+          await loadSales();
           MySwal.fire({
             title: 'Supprimé !',
             text: 'Cette vente a bien été supprimée !',
@@ -85,8 +88,62 @@ const Sales = () => {
     });
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleDownloadPDF = () => {
+    // Créer une copie du tableau pour le PDF
+    const tableElement = tableRef.current.cloneNode(true);
+    
+    // Supprimer la colonne des actions
+    const rows = tableElement.querySelectorAll('tr');
+    rows.forEach(row => {
+      // Supprimer la dernière cellule (colonne Actions)
+      const cells = row.querySelectorAll('th, td');
+      if (cells.length > 0) {
+        row.removeChild(cells[cells.length - 1]);
+      }
+    });
+    
+    // Créer un conteneur pour le tableau
+    const container = document.createElement('div');
+    const title = document.createElement('h2');
+    title.textContent = 'Suivi des Ventes Auris';
+    title.style.textAlign = 'center';
+    title.style.margin = '20px 0';
+    title.style.fontSize = '18px';
+    title.style.fontWeight = 'bold';
+    
+    const date = document.createElement('p');
+    date.textContent = `Généré le ${new Date().toLocaleDateString()} à ${new Date().toLocaleTimeString()}`;
+    date.style.textAlign = 'center';
+    date.style.marginBottom = '20px';
+    date.style.fontSize = '12px';
+    
+    container.appendChild(title);
+    container.appendChild(date);
+    container.appendChild(tableElement);
+    
+    // Appliquer des styles pour l'impression
+    tableElement.classList.add('pdf-table');
+    
+    // Configuration de html2pdf
+    const options = {
+      filename: `Suivi_des_Ventes_Auris_${new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        letterRendering: true
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'landscape',
+        compress: true
+      },
+      margin: [15, 15, 15, 15]
+    };
+    
+    // Générer le PDF
+    html2pdf().from(container).set(options).save();
   };
 
   const years = ['all', 2025, 2026, 2027];
@@ -107,12 +164,7 @@ const Sales = () => {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
-        <CircleLoader
-          loading={false}
-          size={50}
-          aria-label="Error Spinner"
-          data-testid="error-loader"
-        />
+        <CircleLoader loading={false} size={50} />
         <p className="mt-4 text-red-500">{error}</p>
         {error.includes('Non autorisé') && (
           <Link
@@ -127,21 +179,28 @@ const Sales = () => {
   }
 
   return (
-    <div className="max-w-6xl mt-20 mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-7xl mt-20 mx-auto p-6 bg-white rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-700">Suivi des Ventes Auris</h2>
-        <div className="flex space-x-4">
-      
+        <div className="flex gap-2">
+          <button
+            onClick={handleDownloadPDF}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-opacity-90 transition"
+            disabled={filteredSales.length === 0}
+          >
+            <FaDownload />
+            Télécharger le tableau
+          </button>
           <Link
             to="/dashboard/sales/new"
-            className="inline-block px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-opacity-80"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primaryColor text-white rounded-lg hover:bg-opacity-90 transition"
           >
+            <FaPlus />
             Ajouter une vente
           </Link>
         </div>
       </div>
 
-      {/* Barre de recherche */}
       <div className="mb-6">
         <input
           type="text"
@@ -152,13 +211,12 @@ const Sales = () => {
         />
       </div>
 
-      {/* Onglets par année */}
       <div className="flex space-x-2 mb-6">
         {years.map((year) => (
           <button
             key={year}
             onClick={() => setSelectedYear(year)}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-4 py-2 rounded-lg transition ${
               selectedYear === year
                 ? 'bg-primaryColor text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -171,22 +229,22 @@ const Sales = () => {
 
       {filteredSales.length > 0 ? (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
+          <table ref={tableRef} className="min-w-full bg-white rounded-lg shadow overflow-hidden">
             <thead>
-              <tr className="bg-gray-100">
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Date</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Facture N°</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Nom</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Prénom</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">N° de référence</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Nom du produit</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">N° de lot</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+              <tr className="bg-gray-100 text-gray-700 text-sm font-semibold">
+                <th className="py-3 px-4 text-left">Date</th>
+                <th className="py-3 px-4 text-left">Facture N°</th>
+                <th className="py-3 px-4 text-left">Nom</th>
+                <th className="py-3 px-4 text-left">Prénom</th>
+                <th className="py-3 px-4 text-left">N° de référence</th>
+                <th className="py-3 px-4 text-left">Nom du produit</th>
+                <th className="py-3 px-4 text-left">N° de lot</th>
+                <th className="py-3 px-4 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredSales.map((sale) => (
-                <tr key={sale._id} className="border-b hover:bg-gray-50">
+                <tr key={sale._id} className="border-b hover:bg-gray-100 transition">
                   <td className="py-3 px-4">{new Date(sale.date).toLocaleDateString()}</td>
                   <td className="py-3 px-4">{sale.invoiceNumber}</td>
                   <td className="py-3 px-4">{sale.lastName}</td>
@@ -194,14 +252,20 @@ const Sales = () => {
                   <td className="py-3 px-4">{sale.referenceNumber}</td>
                   <td className="py-3 px-4">{sale.productName}</td>
                   <td className="py-3 px-4">{sale.lotNumber}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 flex space-x-4">
+                    <Link
+                      to={`/dashboard/sales/edit/${sale._id}`}
+                      className="text-blue-500 hover:text-blue-700"
+                      title="Modifier"
+                    >
+                      <FaEdit />
+                    </Link>
                     <button
                       onClick={() => handleDelete(sale._id)}
                       className="text-red-500 hover:text-red-700"
                       title="Supprimer"
                     >
                       <FaTrash />
-                     
                     </button>
                   </td>
                 </tr>

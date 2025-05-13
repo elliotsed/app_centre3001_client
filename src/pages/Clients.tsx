@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchClients } from '../api/clients';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
-import { FaPenToSquare, FaRegTrashCan, FaEye } from 'react-icons/fa6';
+import { FaEye, FaRegTrashCan } from 'react-icons/fa6';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { DashboardContext } from '../pages/Dashboard';
@@ -19,11 +19,14 @@ const customStyles = {
     style: {
       fontSize: '15px',
       fontWeight: 600,
+      backgroundColor: '#f9fafb',
+      color: '#111827',
+      borderBottom: '1px solid #e5e7eb',
     },
   },
   cells: {
     style: {
-      fontSize: '13px',
+      fontSize: '14px',
       fontWeight: 500,
     },
   },
@@ -32,10 +35,14 @@ const customStyles = {
 const Clients = () => {
   interface Client {
     _id: string;
-    name: string;
-    email: string;
-    phone?: string;
-    address?: string;
+    firstName: string;
+    lastName: string;
+    clientNumber: string;
+    address: string;
+    municipality: string;
+    postalCode: string;
+    phone: string;
+    consultations?: string[];
   }
 
   const [clients, setClients] = useState<Client[]>([]);
@@ -77,7 +84,7 @@ const Clients = () => {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
-          .then((res) => {
+          .then(() => {
             setClients(clients.filter((client) => client._id !== id));
             MySwal.fire({
               title: 'Supprimé !',
@@ -98,33 +105,38 @@ const Clients = () => {
 
   const columns = [
     {
+      name: 'Prénom',
+      selector: (row: Client) => row.firstName || 'N/A',
+      sortable: true,
+    },
+    {
       name: 'Nom',
-      selector: (row: Client) => row.name,
+      selector: (row: Client) => row.lastName || 'N/A',
+      sortable: true,
     },
     {
-      name: 'Email',
-      selector: (row: Client) => row.email,
+      name: 'N° Client',
+      selector: (row: Client) => row.clientNumber || 'N/A',
     },
     {
-      name: 'Action',
+      name: 'Actions',
       cell: (row: Client) => (
-        <div className="action-icons">
+        <div className="flex items-center gap-3">
           <Link to={`/dashboard/clients/${row._id}`}>
-            <FaEye className="table-icon1" />
+            <FaEye className="text-blue-600 hover:text-blue-800 cursor-pointer text-lg" />
           </Link>
-          {/* <Link to={`/dashboard/edit-client/${row._id}`}>
-            <FaPenToSquare className="table-icon2" />
-          </Link> */}
-          <FaRegTrashCan className="table-icon3" onClick={() => deleteClient(row._id)} />
+          <FaRegTrashCan
+            className="text-red-500 hover:text-red-700 cursor-pointer text-lg"
+            onClick={() => deleteClient(row._id)}
+          />
         </div>
       ),
     },
   ];
 
-  const filteredClients = clients.filter(
-    (client) =>
-      client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      client.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredClients = clients.filter((client) =>
+    [client.firstName, client.lastName, client.clientNumber]
+      .some(field => field?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   if (loading) {
@@ -135,12 +147,7 @@ const Clients = () => {
             <GiHamburgerMenu />
           </div>
         </div>
-        <CircleLoader
-          loading={loading}
-          size={50}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <CircleLoader loading={loading} size={50} />
       </div>
     );
   }
@@ -150,32 +157,34 @@ const Clients = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="topbar">
-        <div className="toggle" onClick={handleToggleClick}>
-          <GiHamburgerMenu />
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <div
+            className="p-2 bg-primaryColor rounded-md text-white cursor-pointer"
+            onClick={handleToggleClick}
+          >
+            <GiHamburgerMenu />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">Liste des clients</h2>
         </div>
-        <div className="search">
-          <label>
-            <input
-              type="text"
-              placeholder="Rechercher par nom ou email"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </label>
-        </div>
+
+        <input
+          type="text"
+          placeholder="🔍 Rechercher..."
+          className="mt-4 sm:mt-0 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primaryColor w-full sm:w-80"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-700 mb-6">Mes Clients</h2>
-
-      <div className="contact-list">
+      <div className="rounded-lg border shadow bg-white p-4">
         <DataTable
           columns={columns}
           data={filteredClients}
           customStyles={customStyles}
           pagination
-          noDataComponent={<h1><strong>Aucun client ajouté</strong></h1>}
+          noDataComponent={<div className="text-center text-gray-600 py-4">Aucun client trouvé</div>}
         />
       </div>
     </div>

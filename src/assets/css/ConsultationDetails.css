@@ -1,0 +1,92 @@
+/* Styles pour impression et PDF */
+
+/* Styles de base pour impression */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .consultation-container,
+  .consultation-container * {
+    visibility: visible;
+  }
+  
+  .consultation-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20mm;
+    font-size: 12pt;
+    background-color: white;
+  }
+  
+  .print-hide {
+    display: none !important;
+  }
+  
+  .print-only-header,
+  .print-only-footer {
+    display: block !important;
+  }
+  
+  /* Améliorations pour l'impression */
+  .consultation-container h4 {
+    font-size: 14pt;
+    margin-top: 10pt;
+    margin-bottom: 5pt;
+  }
+  
+  .consultation-container p {
+    margin: 5pt 0;
+  }
+  
+  .consultation-container ul {
+    margin-top: 5pt;
+  }
+  
+  .consultation-container li {
+    margin-bottom: 3pt;
+  }
+  
+  /* Meilleurs arrière-plans pour impression */
+  .bg-gray-100 {
+    background-color: #f9f9f9 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Amélioration des espaces */
+  .grid {
+    grid-gap: 15pt !important;
+  }
+  
+  .divide-y > div {
+    padding: 8pt !important;
+    margin-bottom: 5pt !important;
+    border: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+  }
+}
+
+/* Classe spéciale appliquée dynamiquement pour le PDF */
+.print-mode .print-only-header,
+.print-mode .print-only-footer {
+  display: block !important;
+}
+
+.print-mode .py-3 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Gestion des sauts de page */
+@page {
+  margin: 15mm;
+}
+
+/* Pour écran normal, cacher les éléments d'impression */
+.print-only-header,
+.print-only-footer {
+  display: none;
+}
