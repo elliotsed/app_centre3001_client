@@ -8,8 +8,31 @@ export const fetchSales = async () => {
     const response = await axios.get(API_BASE_URL);
     return response.data;
   } catch (error) {
-    console.error('Error fetching sales:', error);
-    return error;
+    console.error('Error fetching sales:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
+};
+
+export const fetchSale = async (saleId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${saleId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching sale:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    if (error.response?.status === 404) {
+      throw new Error('Vente non trouvée');
+    } else if (error.response?.status === 401) {
+      throw new Error('Non autorisé: veuillez vous reconnecter');
+    }
+    throw new Error('Erreur lors de la récupération de la vente');
   }
 };
 
@@ -18,8 +41,31 @@ export const createSale = async (saleData) => {
     const response = await axios.post(API_BASE_URL, saleData);
     return response.data;
   } catch (error) {
-    console.error('Error creating sale:', error);
-    return error;
+    console.error('Error creating sale:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    throw error;
+  }
+};
+
+export const updateSale = async (saleId, saleData) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/${saleId}`, saleData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating sale:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
+    if (error.response?.status === 404) {
+      throw new Error('Vente non trouvée');
+    } else if (error.response?.status === 401) {
+      throw new Error('Non autorisé: veuillez vous reconnecter');
+    }
+    throw new Error('Erreur lors de la mise à jour de la vente');
   }
 };
 

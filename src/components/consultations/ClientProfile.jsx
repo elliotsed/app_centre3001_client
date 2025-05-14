@@ -9,7 +9,8 @@ import {
   FaPlus,
   FaEye,
   FaCalendarAlt,
-  FaFileMedical
+  FaFileMedical,
+  FaEdit,
 } from 'react-icons/fa';
 
 const ClientProfile = () => {
@@ -22,11 +23,10 @@ const ClientProfile = () => {
     const loadClient = async () => {
       try {
         const data = await fetchClient(id);
-        if (data instanceof Error) throw data;
         setClient(data);
         setLoading(false);
       } catch (err) {
-        setError('Erreur lors de la récupération du client');
+        setError(err.message || 'Erreur lors de la récupération du client');
         setLoading(false);
       }
     };
@@ -92,13 +92,22 @@ const ClientProfile = () => {
                 <li key={consultation._id} className="border-b pb-3">
                   <p><FaCalendarAlt className="inline text-pink-500 mr-2" /><strong>Date :</strong> {new Date(consultation.date).toLocaleDateString()}</p>
                   <p><FaFileMedical className="inline text-gray-600 mr-2" /><strong>Motif :</strong> {consultation.consultationReason}</p>
-                  <Link
-                    to={`/dashboard/consultations/${consultation._id}`}
-                    className="inline-flex items-center gap-2 mt-2 px-3 py-2 bg-primaryColor text-white rounded-md hover:bg-opacity-90 text-sm"
-                  >
-                    <FaEye />
-                    Voir détails
-                  </Link>
+                  <div className="flex space-x-4 mt-2">
+                    <Link
+                      to={`/dashboard/consultations/${consultation._id}`}
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-primaryColor text-white rounded-md hover:bg-opacity-90 text-sm"
+                    >
+                      <FaEye />
+                      Voir détails
+                    </Link>
+                    <Link
+                      to={`/dashboard/consultations/edit/${consultation._id}`}
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm"
+                    >
+                      <FaEdit />
+                      Modifier
+                    </Link>
+                  </div>
                 </li>
               ))}
             </ul>

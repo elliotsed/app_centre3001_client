@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { FaTrash, FaEdit, FaPlus, FaDownload } from 'react-icons/fa';
 import { fetchSales, deleteSale } from '../api/sales';
@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import html2pdf from 'html2pdf.js';
 import '../assets/css/Sales.css';
-
 
 const MySwal = withReactContent(Swal);
 
@@ -19,6 +18,8 @@ const Sales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState('all');
   const tableRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const loadSales = async () => {
     try {
@@ -34,7 +35,10 @@ const Sales = () => {
 
   useEffect(() => {
     loadSales();
-  }, []);
+    if (location.state?.refresh) {
+      loadSales();
+    }
+  }, [location]);
 
   useEffect(() => {
     let filtered = sales;
@@ -88,21 +92,20 @@ const Sales = () => {
     });
   };
 
+  const handleEdit = (saleId) => {
+    navigate(`/dashboard/sales/edit/${saleId}`);
+  };
+
   const handleDownloadPDF = () => {
-    // Créer une copie du tableau pour le PDF
     const tableElement = tableRef.current.cloneNode(true);
-    
-    // Supprimer la colonne des actions
     const rows = tableElement.querySelectorAll('tr');
-    rows.forEach(row => {
-      // Supprimer la dernière cellule (colonne Actions)
+    rows.forEach((row) => {
       const cells = row.querySelectorAll('th, td');
       if (cells.length > 0) {
         row.removeChild(cells[cells.length - 1]);
       }
     });
-    
-    // Créer un conteneur pour le tableau
+
     const container = document.createElement('div');
     const title = document.createElement('h2');
     title.textContent = 'Suivi des Ventes Auris';
@@ -110,39 +113,36 @@ const Sales = () => {
     title.style.margin = '20px 0';
     title.style.fontSize = '18px';
     title.style.fontWeight = 'bold';
-    
+
     const date = document.createElement('p');
     date.textContent = `Généré le ${new Date().toLocaleDateString()} à ${new Date().toLocaleTimeString()}`;
     date.style.textAlign = 'center';
     date.style.marginBottom = '20px';
     date.style.fontSize = '12px';
-    
+
     container.appendChild(title);
     container.appendChild(date);
     container.appendChild(tableElement);
-    
-    // Appliquer des styles pour l'impression
+
     tableElement.classList.add('pdf-table');
-    
-    // Configuration de html2pdf
+
     const options = {
       filename: `Suivi_des_Ventes_Auris_${new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')}.pdf`,
       image: { type: 'jpeg', quality: 1 },
-      html2canvas: { 
+      html2canvas: {
         scale: 2,
         useCORS: true,
-        letterRendering: true
+        letterRendering: true,
       },
-      jsPDF: { 
-        unit: 'mm', 
-        format: 'a4', 
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
         orientation: 'landscape',
-        compress: true
+        compress: true,
       },
-      margin: [15, 15, 15, 15]
+      margin: [15, 15, 15, 15],
     };
-    
-    // Générer le PDF
+
     html2pdf().from(container).set(options).save();
   };
 
@@ -253,13 +253,14 @@ const Sales = () => {
                   <td className="py-3 px-4">{sale.productName}</td>
                   <td className="py-3 px-4">{sale.lotNumber}</td>
                   <td className="py-3 px-4 flex space-x-4">
-                    <Link
-                      to={`/dashboard/sales/edit/${sale._id}`}
-                      className="text-blue-500 hover:text-blue-700"
-                      title="Modifier"
+                    <button
+                      onClick={() => handleEdit(sale._id)}
+                      className="inline-flex items-center gap-2 px-2 py-1 bg-primaryColor text-white rounded-lg hover:bg-opacity-80"
+                      title="Modifier la vente"
                     >
                       <FaEdit />
-                    </Link>
+                      <span className="text-sm">Modifier</span>
+                    </button>
                     <button
                       onClick={() => handleDelete(sale._id)}
                       className="text-red-500 hover:text-red-700"

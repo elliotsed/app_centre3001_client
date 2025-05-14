@@ -4,6 +4,7 @@ import { fetchClients } from '../api/clients';
 import axios from 'axios';
 import DataTable from 'react-data-table-component';
 import { FaEye, FaRegTrashCan } from 'react-icons/fa6';
+import { FaEdit } from 'react-icons/fa';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { DashboardContext } from '../pages/Dashboard';
@@ -124,6 +125,9 @@ const Clients = () => {
         <div className="flex items-center gap-3">
           <Link to={`/dashboard/clients/${row._id}`}>
             <FaEye className="text-blue-600 hover:text-blue-800 cursor-pointer text-lg" />
+          </Link>
+          <Link to={`/dashboard/edit-client/${row._id}`}>
+            <FaEdit className="text-green-600 hover:text-green-800 cursor-pointer text-lg" />
           </Link>
           <FaRegTrashCan
             className="text-red-500 hover:text-red-700 cursor-pointer text-lg"

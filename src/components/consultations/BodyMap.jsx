@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import photo from '../../assets/photo.png';
-import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
 const BodyMap = ({ painAreas, scars, onUpdate }) => {
   const [painBodyPart, setPainBodyPart] = useState('');

@@ -24,6 +24,9 @@ import AddClient from './components/consultations/AddClient'
 import NewConsultation from './pages/NewConsultation'
 import NewSale from './components/NewSale'
 import Sales from './components/Sales'
+import EditSale from './components/EditSale'
+import EditClient from './components/consultations/EditClient'
+import EditConsultation from './components/consultations/EditConsultation'
 
 export const UserContext = createContext(null);
 
@@ -85,6 +88,14 @@ const router = createBrowserRouter([
         element: <ClientProfile />,
       },
       {
+        path: '/dashboard/edit-client/:id',
+        element: <EditClient />,
+      },
+      {
+        path: '/dashboard/consultations/edit/:id',
+        element: <EditConsultation />,
+      },
+      {
         path: "/dashboard/clients",
         element: <Clients />,
       },
@@ -107,6 +118,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/sales",
         element: <Sales />,
+      },
+      {
+        path: "/dashboard/sales/edit/:id",
+        element: <EditSale />,
       },
     ],
   },
