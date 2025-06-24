@@ -10,6 +10,7 @@ const AddClient = () => {
     firstName: '',
     lastName: '',
     address: '',
+    remarque: '',
     municipality: '',
     postalCode: '',
     phone: '',
@@ -143,6 +144,17 @@ const AddClient = () => {
               />
             </div>
           </div>
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Remarque"
+                className="form-control"
+                name="remarque"
+                required
+                value={values.remarque}
+                onChange={handleInput}
+              />
+            </div>
         
           <button className="form-btn">Ajouter</button>
         </form>

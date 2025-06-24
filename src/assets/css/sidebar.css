@@ -10,7 +10,6 @@
 
 .navigation.active {
     width: 70px;
-    
 }
 
 .activeLink {
@@ -52,8 +51,8 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    padding-left:20px ;
-    padding-right: 9;
+    padding-left: 20px;
+    padding-right: 9px;
     height: 60px;
     color: var(--white);
 }
@@ -62,12 +61,10 @@
     text-decoration: underline;
 }
 
-
 .navigation ul li .sidebar-link .icon {
     position: relative;
     display: block;
     min-width: 60px;
-    /* height: 60px; */
     line-height: 65px;
     text-align: center;
 }
@@ -78,16 +75,17 @@
 
 .navigation ul li .sidebar-link .title {
     position: relative;
-    /* display: block; */
     padding: 0 10px;
-    /* height: 60px; */
-    /* line-height: 55px; */
     text-align: start;
     white-space: nowrap;
 }
 
-/* --------- curve outside ---------- */
+.navigation ul li.sub-menu .sidebar-link {
+    padding-left: 40px;
+    font-size: 0.9em;
+}
 
+/* --------- curve outside ---------- */
 .activeLink .sidebar-link::before {
     content: "";
     position: absolute;
@@ -114,8 +112,7 @@
     pointer-events: none;
 }
 
-
-/* ====================== Responsive Design ========================== */
+/* ===================== Responsive Design ========================== */
 @media (max-width: 991px) {
     .navigation {
         left: -300px;
@@ -126,7 +123,6 @@
         left: 0;
     }
 }
-
 
 @media (max-width: 480px) {
     .navigation {
@@ -139,5 +135,4 @@
         width: 100%;
         left: 0;
     }
-
 }

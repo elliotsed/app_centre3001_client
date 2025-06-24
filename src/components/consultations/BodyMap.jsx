@@ -16,10 +16,10 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
   const [scarError, setScarError] = useState('');
 
   const bodyParts = [
-    'Tête', 'Cou', 'Épaule gauche', 'Épaule droite', 'Bras gauche', 'Bras droit',
+    'Tête', 'Cou droit', 'Cou gauche', 'Épaule gauche', 'Épaule droite', 'Bras gauche', 'Bras droit',
     'Main gauche', 'Main droite', 'Coude gauche', 'Coude droite', 'Poitrine', 'Dos haut',
     'Dos milieu', 'Dos bas', 'Ventre', 'Hanche gauche', 'Hanche droite', 'Jambe gauche',
-    'Jambe droite', 'Genou gauche', 'Genou droite', 'Pied gauche', 'Pied droite', 'Sacrum',
+    'Jambe droite', 'Cuisse droite','Cuisse gauche', 'Mollet droit','Mollet gauche', 'Thorax droit','Thorax gauche', 'Genou gauche', 'Genou droite', 'Pied gauche', 'Pied droite', 'Sacrum',
   ];
 
   const bodyPartOptions = bodyParts.map((part) => ({ value: part, label: part }));
@@ -60,6 +60,16 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
     setScarCustomPart('');
     setUseScarCustomPart(false);
     setScarError('');
+  };
+
+  const deletePainArea = (index) => {
+    const newPainAreas = painAreas.filter((_, i) => i !== index);
+    onUpdate(newPainAreas, scars);
+  };
+
+  const deleteScar = (index) => {
+    const newScars = scars.filter((_, i) => i !== index);
+    onUpdate(painAreas, newScars);
   };
 
   return (
@@ -206,6 +216,14 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
                 <span>
                   {pain.bodyPart} {pain.side ? `(${pain.side})` : ''}: Actuel: {pain.intensity}%, Max: {pain.maxIntensity}%
                 </span>
+                <button
+                  type="button"
+                  onClick={() => deletePainArea(index)}
+                  className="ml-2 text-gray-600 hover:text-red-600"
+                  title="Supprimer"
+                >
+                  🗑️
+                </button>
               </li>
             ))}
           </ul>
@@ -220,6 +238,14 @@ const BodyMap = ({ painAreas, scars, onUpdate }) => {
               <li key={index} className="flex items-center gap-2 mb-2">
                 <span className="text-blue-600">📍</span>
                 <span>{scar.bodyPart}: {scar.description}</span>
+                <button
+                  type="button"
+                  onClick={() => deleteScar(index)}
+                  className="ml-2 text-gray-600 hover:text-red-600"
+                  title="Supprimer"
+                >
+                  🗑️
+                </button>
               </li>
             ))}
           </ul>
