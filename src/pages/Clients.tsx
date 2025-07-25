@@ -42,6 +42,7 @@ const Clients = () => {
     address: string;
     municipality: string;
     postalCode: string;
+    remarque: string;
     phone: string;
     consultations?: string[];
   }
@@ -57,7 +58,10 @@ const Clients = () => {
       try {
         const data = await fetchClients();
         if (data instanceof Error) throw data;
-        setClients(data);
+
+        const sortedData = data.sort((a, b) => b._id.localeCompare(a._id));
+
+        setClients(sortedData); 
         setLoading(false);
       } catch (err) {
         setError('Erreur lors de la récupération des clients');
@@ -118,6 +122,10 @@ const Clients = () => {
     {
       name: 'N° Client',
       selector: (row: Client) => row.clientNumber || 'N/A',
+    },
+     {
+      name: 'Remarque',
+      selector: (row: Client) => row.remarque || 'N/A',
     },
     {
       name: 'Actions',

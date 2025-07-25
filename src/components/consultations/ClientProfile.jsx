@@ -77,6 +77,8 @@ const ClientProfile = () => {
           <p><FaMapMarkerAlt className="inline text-green-600 mr-2" /><strong>Municipalité :</strong> {client.municipality || 'N/A'}</p>
           <p><FaMapMarkerAlt className="inline text-green-600 mr-2" /><strong>Code postal :</strong> {client.postalCode || 'N/A'}</p>
           <p><FaPhone className="inline text-yellow-600 mr-2" /><strong>Téléphone :</strong> {client.phone || 'N/A'}</p>
+                    <p><FaFileMedical className="inline text-purple-600 mr-2" /><strong>Remarque :</strong> {client.remarque || 'N/A'}</p>
+
         </div>
 
         {/* Consultations */}

@@ -111,8 +111,10 @@ const Contacts = () => {
             return 'Entreprise';
           case 'private':
             return 'Privé';
-          case 'client':
-            return 'Client';
+          case 'Client thérapeutique':
+            return 'Client thérapeutique';
+          case 'Client boutique':
+          return 'Client boutique';
         }
       }
     },

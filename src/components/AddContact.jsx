@@ -92,8 +92,8 @@ const AddContact = () => {
                             <select name="contactType" value={values.contactType} onChange={handleInput}>
                                 <option value="private">Privé</option>
                                 <option value="business">Entreprise</option>
-                                <option value="client">Client thérapeutique</option>
-                                <option value="client">Client boutique</option>
+                                <option value="Client thérapeutique">Client thérapeutique</option>
+                                <option value="Client boutique">Client boutique</option>
                             </select>
                         </div>
                     </div>
