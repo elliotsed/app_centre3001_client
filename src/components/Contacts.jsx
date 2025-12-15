@@ -225,7 +225,8 @@ const Contacts = () => {
                   <option value="all">Tous</option>
                   <option value="private">Privé</option>
                   <option value="business">Entreprise</option>
-                  <option value="client">Client</option>
+                  <option value="Client thérapeutique">Client thérapeutique</option>
+    <option value="Client boutique">Client boutique</option>
                 </select>
               </div>
             }
@@ -269,7 +270,9 @@ const Contacts = () => {
               <div className="contact-details-column">
                 <p><strong>Skype:</strong> <span>{selectedContact.skype}</span></p>
                 <p><strong>Date de naissance:</strong> <span>{selectedContact.birthday}</span></p>
-                {(selectedContact.contactType === "business" || selectedContact.contactType === "client") ?
+                {(selectedContact.contactType === "business" || 
+  selectedContact.contactType === "Client thérapeutique" || 
+  selectedContact.contactType === "Client boutique") ?
                   <>
                     <p><strong>{"Nom de l'entreprise:"}</strong> <span>{selectedContact.businessName}</span></p>
                     <p><strong>Moyen de paiement:</strong> <span>{selectedContact.paymentMethod}</span></p>
